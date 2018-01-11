@@ -28,16 +28,6 @@ public class LoginActivity extends AppCompatActivity {
     EditText mPasswordEditText;
 
     @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (null != currentUser) {
-            // TODO: Direct to index page
-        }
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
@@ -101,6 +91,16 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(new Intent(v.getContext(), RegisterActivity.class));
             }
         });
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (null != currentUser) {
+            finish();
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+        }
     }
 
     private boolean isValidEmail(String email) {

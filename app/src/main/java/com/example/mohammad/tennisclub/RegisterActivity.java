@@ -35,16 +35,6 @@ public class RegisterActivity extends AppCompatActivity {
     EditText mPhoneEditText;
 
     @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (null != currentUser) {
-            // TODO: Direct to index page
-        }
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
@@ -138,6 +128,16 @@ public class RegisterActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), LoginActivity.class));
             }
         });
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (null != currentUser) {
+            finish();
+            startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+        }
     }
 
     private boolean isValidName(String name) {
