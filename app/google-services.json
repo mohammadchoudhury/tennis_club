@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "439135324680",
+    "firebase_url": "https://tennisclub-8b384.firebaseio.com",
+    "project_id": "tennisclub-8b384",
+    "storage_bucket": "tennisclub-8b384.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:439135324680:android:2b630ff9c0143dd1",
+        "android_client_info": {
+          "package_name": "com.example.mohammad.tennisclub"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "439135324680-kakeu4nep3rh664bachoif69fi7juhg6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mohammad.tennisclub",
+            "certificate_hash": "1610334c48987347bb7051e4f7b224283894431b"
+          }
+        },
+        {
+          "client_id": "439135324680-ent23gj5b4uab8sbqfn7vsk37ljtipf2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCukxp5L1boEMYsOEmSXQm_RXYycbnawMo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "439135324680-ent23gj5b4uab8sbqfn7vsk37ljtipf2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
