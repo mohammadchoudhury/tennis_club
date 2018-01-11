@@ -119,9 +119,8 @@ public class RegisterActivity extends AppCompatActivity {
                                         DatabaseReference usersRef = database.getReference("users");
                                         User newUser = new User(email, name, phone);
                                         usersRef.child(user.getUid()).setValue(newUser);
-                                        Toast.makeText(RegisterActivity.this, "Registration Successful", Toast.LENGTH_LONG).show();
-                                        // TODO: Navigate to index page
-//                                        finish();
+                                        finish();
+                                        startActivity(new Intent(RegisterActivity.this, MainActivity.class));
                                     } else {
                                         if (task.getException() instanceof FirebaseAuthUserCollisionException) {
                                             Toast.makeText(RegisterActivity.this, "User already exists", Toast.LENGTH_LONG).show();

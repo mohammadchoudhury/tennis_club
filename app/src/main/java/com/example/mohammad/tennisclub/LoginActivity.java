@@ -15,6 +15,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.regex.Pattern;
@@ -63,7 +65,6 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
                 if (valid) {
-                    ProgressBar pb = new ProgressBar(getApplicationContext());
                     mAuth.signInWithEmailAndPassword(email, password)
                             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                 @Override
@@ -71,11 +72,19 @@ public class LoginActivity extends AppCompatActivity {
                                     if (task.isSuccessful()) {
                                         Toast.makeText(LoginActivity.this, "Authentication successful.",
                                                 Toast.LENGTH_SHORT).show();
-                                        // Sign in success, update UI with the signed-in user's information
                                         FirebaseUser user = mAuth.getCurrentUser();
+                                        finish();
+                                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
                                     } else {
-                                        Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                                Toast.LENGTH_SHORT).show();
+                                        if (task.getException() instanceof FirebaseAuthInvalidUserException) {
+                                            Toast.makeText(LoginActivity.this, "User account does not exist.",
+                                                    Toast.LENGTH_LONG).show();
+                                        } else if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
+                                            Toast.makeText(LoginActivity.this, "User password incorrect.",
+                                                    Toast.LENGTH_LONG).show();
+                                        }
+//                                        Toast.makeText(LoginActivity.this, "Authentication failed. " + task.getException(),
+//                                                Toast.LENGTH_LONG).show();
                                     }
                                 }
                             });
