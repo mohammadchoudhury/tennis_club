@@ -81,6 +81,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // TODO: Direct to register page
+                startActivity(new Intent(getApplicationContext(), RegisterActivity.class));
             }
         });
 
