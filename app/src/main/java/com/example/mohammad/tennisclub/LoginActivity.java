@@ -26,6 +26,16 @@ public class LoginActivity extends AppCompatActivity {
     EditText mPasswordEditText;
 
     @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (null != currentUser) {
+            // TODO: Direct to index page
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
@@ -41,10 +51,8 @@ public class LoginActivity extends AppCompatActivity {
                 boolean valid = true;
 
                 final String email = mEmailEditText.getText().toString();
-                if (email.isEmpty()) {
-                    mEmailEditText.setError("Enter an email address");
-                } else if (!isValidEmail(email)) {
-                    mEmailEditText.setError("Email is invalid");
+                if (!isValidEmail(email)) {
+                    mEmailEditText.setError("Enter a valid email address");
                     valid = false;
                 }
 
@@ -57,7 +65,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (valid) {
                     ProgressBar pb = new ProgressBar(getApplicationContext());
                     mAuth.signInWithEmailAndPassword(email, password)
-                            .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()) {
@@ -81,20 +89,9 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // TODO: Direct to register page
-                startActivity(new Intent(getApplicationContext(), RegisterActivity.class));
+                startActivity(new Intent(v.getContext(), RegisterActivity.class));
             }
         });
-
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (null != currentUser) {
-            // TODO: Direct to index page
-        }
     }
 
     private boolean isValidEmail(String email) {
