@@ -25,14 +25,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity {
 
     FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_home);
 
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(MainActivity.this, databaseError.getDetails(), Toast.LENGTH_LONG).show();
+                Toast.makeText(HomeActivity.this, databaseError.getDetails(), Toast.LENGTH_LONG).show();
             }
         });
 
@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (null == currentUser) {
             finish();
-            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            startActivity(new Intent(HomeActivity.this, LoginActivity.class));
         }
     }
 
