@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.mohammad.tennisclub.model.User;
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
         FirebaseUser user = mAuth.getCurrentUser();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference userRef = database.getReference("users/" + user.getUid());
-//        User cUser;
         userRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                Toast.makeText(MainActivity.this, databaseError.getDetails(), Toast.LENGTH_LONG).show();
             }
         });
 
@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         List<String> bookings = new ArrayList<>(Arrays.asList(data));
         ListAdapter bookingsAdapter = new ArrayAdapter<String>(
                 this,
-                android.R.layout.simple_list_item_1,
+                android.R.layout.simple_selectable_list_item,
                 data
         );
         ListView mListView = (ListView) findViewById(R.id.lv_bookings);
@@ -92,8 +92,6 @@ public class MainActivity extends AppCompatActivity {
                 mAuth.signOut();
                 finish();
                 startActivity(new Intent(this, LoginActivity.class));
-                break;
-            case R.id.action_settings:
                 break;
         }
         return super.onOptionsItemSelected(item);

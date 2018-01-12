@@ -1,5 +1,14 @@
 <resources>
     <string name="app_name">TennisClub</string>
-    <string name="title_activity_register">RegisterActivity</string>
-    <string name="title_activity_main">MainActivity</string>
+
+    <!--Activity Titles-->
+    <string name="title_activity_register">Register</string>
+    <string name="title_activity_login">Login</string>
+    <string name="title_activity_main">Home</string>
+
+    <!--Action Menu-->
+    <string name="action_logout">Logout</string>
+
+    <!--Image View Content Description-->
+    <string name="image_description_profile_pic">Profile Picture</string>
 </resources>
