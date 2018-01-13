@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TennisClub</string>
+    <string name="app_name" translatable="false">Tennis Club</string>
 
     <!--Activity Titles-->
     <string name="title_activity_register">Register</string>
@@ -11,4 +11,20 @@
 
     <!--Image View Content Description-->
     <string name="image_description_profile_pic">Profile Picture</string>
+
+    <!--Text-->
+    <string name="text_login_other">Or connect with</string>
+    <string name="text_facebook" translatable="false">Facebook</string>
+    <string name="text_google" translatable="false">Google</string>
+    <string name="text_forgot_password">Forgot password? <b>Reset now</b></string>
+    <string name="text_sign_up">Don\'t have an account? <b>Sign Up</b></string>
+    <string name="text_sign_in">Already have an account? <b>Sign In</b></string>
+    <string name="text_login">Login</string>
+    <string name="text_register">Register</string>
+    <string name="text_email">Email</string>
+    <string name="text_password">Password</string>
+    <string name="text_confirm_password">Confirm Password</string>
+    <string name="text_name">Name</string>
+    <string name="text_phone">Mobile Phone Number</string>
+
 </resources>

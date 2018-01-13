@@ -7,7 +7,7 @@
     <!--<color name="colorPrimaryDark">#309f3f</color>-->
     <!--<color name="colorAccent">#40e6ff</color>-->
 
-    <color name="colorPrimary">#000000</color>
+    <color name="colorPrimary">#64dd17</color>
     <color name="colorPrimaryLight">#9cff57</color>
     <color name="colorPrimaryDark">#1faa00</color>
     <color name="colorAccent">#0091ea</color>
@@ -15,4 +15,5 @@
     <color name="colorAccentDark">#0064b7</color>
     <color name="colorTextPrimary">#000</color>
     <color name="colorTextAccent">#000</color>
+    <color name="colorDivider">#8f8f8f</color>
 </resources>
