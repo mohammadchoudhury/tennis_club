@@ -120,7 +120,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-        ((TextView) findViewById(R.id.tv_signin)).setOnClickListener(new View.OnClickListener() {
+        ((TextView) findViewById(R.id.tv_sign_in)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), LoginActivity.class));

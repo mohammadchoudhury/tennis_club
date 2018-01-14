@@ -16,6 +16,7 @@
     <string name="text_login"><b>Login</b></string>
     <string name="text_register"><b>Register</b></string>
     <string name="text_login_other">Sign in with</string>
+    <string name="text_register_other">Sign up with</string>
     <string name="text_facebook" translatable="false">Facebook</string>
     <string name="text_google" translatable="false">Google</string>
     <string name="text_forgot_password">Forgot password?</string>

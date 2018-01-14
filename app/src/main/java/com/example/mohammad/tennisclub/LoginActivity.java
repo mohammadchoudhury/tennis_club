@@ -83,7 +83,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        ((TextView) findViewById(R.id.tv_signup)).setOnClickListener(new View.OnClickListener() {
+        ((TextView) findViewById(R.id.tv_sign_up)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(v.getContext(), RegisterActivity.class));
