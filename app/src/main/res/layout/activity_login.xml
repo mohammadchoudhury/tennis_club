@@ -1,128 +1,142 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fillViewport="true">
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:orientation="vertical"
+        android:layout_height="match_parent"
         android:padding="@dimen/layout_padding">
 
-        <TextView
+        <LinearLayout
+            android:id="@+id/ll_top"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:gravity="center"
-            android:text="@string/text_login"
-            android:textSize="36sp" />
+            android:orientation="vertical">
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/etl_email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:transitionName="Email bruv">
-
-            <EditText
-                android:id="@+id/et_email"
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableEnd="@drawable/ic_email_black_24dp"
-                android:drawablePadding="@dimen/drawable_horizontal_padding"
-                android:hint="@string/text_email"
-                android:inputType="textEmailAddress"
-                android:paddingLeft="@dimen/drawable_horizontal_padding"
-                android:paddingRight="@dimen/drawable_horizontal_padding" />
+                android:layout_marginBottom="@dimen/text_vertical_padding"
+                android:gravity="center"
+                android:text="@string/text_login"
+                android:textSize="36sp" />
 
-        </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/etl_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/etl_password"
+                <EditText
+                    android:id="@+id/et_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableEnd="@drawable/ic_email_black_24dp"
+                    android:drawablePadding="@dimen/drawable_horizontal_padding"
+                    android:hint="@string/text_email"
+                    android:inputType="textEmailAddress"
+                    android:paddingLeft="@dimen/drawable_horizontal_padding"
+                    android:paddingRight="@dimen/drawable_horizontal_padding" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/etl_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/et_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableEnd="@drawable/ic_lock_black_24dp"
+                    android:drawablePadding="@dimen/drawable_horizontal_padding"
+                    android:hint="@string/text_password"
+                    android:inputType="textPassword"
+                    android:paddingLeft="@dimen/drawable_horizontal_padding"
+                    android:paddingRight="@dimen/drawable_horizontal_padding" />
+            </android.support.design.widget.TextInputLayout>
+
+            <Button
+                android:id="@+id/btn_login"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/btn_default"
+                android:text="@string/text_login" />
+
+            <TextView
+                android:id="@+id/tv_signup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:padding="12dp"
+                android:text="@string/text_sign_up"
+                android:textAllCaps="true"
+                android:textColor="@color/primaryDark"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ll_top"
+            app:layout_constraintVertical_bias="1.0">
 
-            <EditText
-                android:id="@+id/et_password"
+            <TextView
+                android:id="@+id/tv_forgot_password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center"
+                android:padding="12dp"
+                android:text="@string/text_forgot_password"
+                android:textSize="12sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="@dimen/divider_horizontal_marign"
+                android:background="@color/divider" />
+
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableEnd="@drawable/ic_lock_black_24dp"
-                android:drawablePadding="@dimen/drawable_horizontal_padding"
-                android:hint="@string/text_password"
-                android:inputType="textPassword"
-                android:paddingLeft="@dimen/drawable_horizontal_padding"
-                android:paddingRight="@dimen/drawable_horizontal_padding" />
+                android:layout_marginBottom="@dimen/text_vertical_padding"
+                android:gravity="center"
+                android:text="@string/text_login_other"
+                android:textSize="12sp" />
 
-        </android.support.design.widget.TextInputLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/btn_login"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:drawableEnd="@drawable/ic_done_black_24dp"
-            android:paddingLeft="@dimen/drawable_horizontal_padding"
-            android:paddingRight="@dimen/drawable_horizontal_padding"
-            android:text="@string/text_login" />
+                <Button
+                    android:id="@+id/btn_login_facebook"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_facebook"
+                    android:drawableEnd="@drawable/ic_facebook_white"
+                    android:paddingLeft="@dimen/drawable_horizontal_padding"
+                    android:paddingRight="@dimen/drawable_horizontal_padding"
+                    android:text="@string/text_facebook" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/divider_horizontal_marign"
-            android:layout_marginTop="@dimen/divider_horizontal_marign"
-            android:gravity="center"
-            android:text="@string/text_login_other"
-            android:textSize="12sp" />
-
-        <Button
-            android:id="@+id/btn_login_facebook"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginBottom="6dp"
-            android:background="@drawable/btn_facebook"
-            android:drawableEnd="@drawable/ic_facebook_white"
-            android:paddingLeft="@dimen/drawable_horizontal_padding"
-            android:paddingRight="@dimen/drawable_horizontal_padding"
-            android:text="@string/text_facebook" />
-
-        <Button
-            android:id="@+id/btn_login_google"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="6dp"
-            android:background="@drawable/btn_google"
-            android:drawableEnd="@drawable/googleg_standard_color_18"
-            android:paddingLeft="@dimen/drawable_horizontal_padding"
-            android:paddingRight="@dimen/drawable_horizontal_padding"
-            android:text="@string/text_google" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginBottom="@dimen/divider_horizontal_marign"
-            android:layout_marginTop="@dimen/divider_horizontal_marign"
-            android:background="@color/divider" />
-
-        <TextView
-            android:id="@+id/tv_forgot_password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:paddingBottom="@dimen/text_vertical_padding"
-            android:paddingTop="@dimen/text_vertical_padding"
-            android:text="@string/text_forgot_password"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/tv_signup"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:paddingBottom="@dimen/text_vertical_padding"
-            android:paddingTop="@dimen/text_vertical_padding"
-            android:text="@string/text_sign_up"
-            android:textSize="16sp" />
-
-    </LinearLayout>
-
+                <Button
+                    android:id="@+id/btn_login_google"
+                    android:layout_width="0sp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_google"
+                    android:drawableEnd="@drawable/googleg_standard_color_18"
+                    android:paddingLeft="@dimen/drawable_horizontal_padding"
+                    android:paddingRight="@dimen/drawable_horizontal_padding"
+                    android:text="@string/text_google" />
+            </LinearLayout>
+        </LinearLayout>
+    </android.support.constraint.ConstraintLayout>
 </ScrollView>
