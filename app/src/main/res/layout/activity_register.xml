@@ -124,7 +124,7 @@
             android:layout_height="1dp"
             android:layout_marginTop="@dimen/divider_horizontal_marign"
             android:layout_marginBottom="@dimen/divider_horizontal_marign"
-            android:background="@color/colorDivider" />
+            android:background="@color/divider" />
 
         <TextView
             android:id="@+id/tv_signin"

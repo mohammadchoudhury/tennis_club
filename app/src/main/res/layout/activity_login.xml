@@ -22,7 +22,8 @@
         <android.support.design.widget.TextInputLayout
             android:id="@+id/etl_email"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:transitionName="Email bruv">
 
             <EditText
                 android:id="@+id/et_email"
@@ -76,9 +77,9 @@
         <Button
             android:id="@+id/btn_login_facebook"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             android:layout_marginBottom="6dp"
-            android:background="#3b5998"
+            android:background="@drawable/btn_facebook"
             android:drawableEnd="@drawable/ic_facebook_white"
             android:paddingLeft="@dimen/drawable_horizontal_padding"
             android:paddingRight="@dimen/drawable_horizontal_padding"
@@ -87,9 +88,9 @@
         <Button
             android:id="@+id/btn_login_google"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             android:layout_marginTop="6dp"
-            android:background="#eeeeee"
+            android:background="@drawable/btn_google"
             android:drawableEnd="@drawable/googleg_standard_color_18"
             android:paddingLeft="@dimen/drawable_horizontal_padding"
             android:paddingRight="@dimen/drawable_horizontal_padding"
@@ -100,7 +101,7 @@
             android:layout_height="1dp"
             android:layout_marginBottom="@dimen/divider_horizontal_marign"
             android:layout_marginTop="@dimen/divider_horizontal_marign"
-            android:background="@color/colorDivider" />
+            android:background="@color/divider" />
 
         <TextView
             android:id="@+id/tv_forgot_password"
