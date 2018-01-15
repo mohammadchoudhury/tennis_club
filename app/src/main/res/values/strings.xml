@@ -28,4 +28,11 @@
     <string name="text_name">Name</string>
     <string name="text_phone">Mobile Phone Number</string>
 
+    <!--Error Messages-->
+    <string name="error_email">Enter a valid email address (email@domain.co.uk)</string>
+    <string name="error_password">Enter a password (a least 8 character including uppercase, lowercase and numeric characters)</string>
+    <string name="error_password_empty">Enter a password</string>
+    <string name="error_confirm_password">Passwords do not match</string>
+    <string name="error_name">Enter a valid name (John Doe)</string>
+    <string name="error_phone">Enter a valid UK mobile phone number (07912346578)</string>
 </resources>

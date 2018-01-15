@@ -2,6 +2,7 @@ package com.example.mohammad.tennisclub;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -23,8 +24,8 @@ import java.util.regex.Pattern;
 public class LoginActivity extends AppCompatActivity {
 
     FirebaseAuth mAuth;
-    EditText mEmailEditText;
-    EditText mPasswordEditText;
+    TextInputLayout mEmailEditTextLayout, mPasswordEditTextLayout;
+    EditText mEmailEditText, mPasswordEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,34 +34,22 @@ public class LoginActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
+        mEmailEditTextLayout = (TextInputLayout) findViewById(R.id.etl_email);
         mEmailEditText = (EditText) findViewById(R.id.et_email);
+        mPasswordEditTextLayout = (TextInputLayout) findViewById(R.id.etl_password);
         mPasswordEditText = (EditText) findViewById(R.id.et_password);
 
         ((Button) findViewById(R.id.btn_login)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean valid = true;
-
-                final String email = mEmailEditText.getText().toString();
-                if (!isValidEmail(email)) {
-                    mEmailEditText.setError("Enter a valid email address");
-                    valid = false;
-                }
-
-                final String password = mPasswordEditText.getText().toString();
-                if (password.isEmpty()) {
-                    mPasswordEditText.setError("Enter a password");
-                    valid = false;
-                }
-
-                if (valid) {
+                if (isValidForm()) {
+                    String email = mEmailEditText.getText().toString().trim();
+                    String password = mPasswordEditText.getText().toString();
                     mAuth.signInWithEmailAndPassword(email, password)
                             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()) {
-                                        Toast.makeText(LoginActivity.this, "Authentication successful.",
-                                                Toast.LENGTH_SHORT).show();
                                         FirebaseUser user = mAuth.getCurrentUser();
                                         finish();
                                         startActivity(new Intent(LoginActivity.this, HomeActivity.class));
@@ -71,15 +60,14 @@ public class LoginActivity extends AppCompatActivity {
                                         } else if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
                                             Toast.makeText(LoginActivity.this, "User password incorrect.",
                                                     Toast.LENGTH_LONG).show();
+                                        } else {
+                                            Toast.makeText(LoginActivity.this, "Error: " + task.getException().getMessage(),
+                                                    Toast.LENGTH_LONG).show();
                                         }
-//                                        Toast.makeText(LoginActivity.this, "Authentication failed. " + task.getException(),
-//                                                Toast.LENGTH_LONG).show();
                                     }
                                 }
                             });
                 }
-
-
             }
         });
 
@@ -101,9 +89,28 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private boolean isValidEmail(String email) {
-        String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
-                + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-        return Pattern.compile(EMAIL_PATTERN).matcher(email).matches();
+    private boolean isValidForm() {
+        boolean valid = true;
+        if (!isValidEmail(mEmailEditText.getText().toString().trim())) {
+            mEmailEditTextLayout.setError(getString(R.string.error_email));
+            valid = false;
+        } else {
+            mEmailEditTextLayout.setErrorEnabled(false);
+        }
+        String password = mPasswordEditText.getText().toString();
+        if (password.isEmpty()) {
+            mPasswordEditTextLayout.setError(getString(R.string.error_password_empty));
+            valid = false;
+        } else {
+            mPasswordEditTextLayout.setErrorEnabled(false);
+        }
+        return valid;
     }
+
+
+    private boolean isValidEmail(String email) {
+        final String pattern = "^[_AZaz09\\+]+(\\.[_AZaz09]+)*@[AZaz09]+(\\.[AZaz09]+)*(\\.[AZaz]{2,})$";
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+
 }

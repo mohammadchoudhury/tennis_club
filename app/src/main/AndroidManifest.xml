@@ -11,8 +11,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".LoginActivity"
-            android:screenOrientation="userPortrait"
-            android:windowSoftInputMode="adjustPan">
+            android:screenOrientation="userPortrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -20,9 +19,10 @@
         </activity>
         <activity
             android:name=".RegisterActivity"
-            android:screenOrientation="userPortrait"
-            android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".HomeActivity" />
+            android:screenOrientation="userPortrait" />
+        <activity
+            android:name=".HomeActivity"
+            android:screenOrientation="userPortrait" />
     </application>
 
 </manifest>

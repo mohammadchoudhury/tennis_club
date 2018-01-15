@@ -1,10 +1,16 @@
 package com.example.mohammad.tennisclub;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,16 +27,18 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.w3c.dom.Text;
+
+import java.io.Console;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 public class RegisterActivity extends AppCompatActivity {
 
     FirebaseAuth mAuth;
-    EditText mEmailEditText;
-    EditText mPasswordEditText;
-    EditText mConfirmPasswordEditText;
-    EditText mNameEditText;
-    EditText mPhoneEditText;
+    TextInputLayout mEmailEditTextLayout, mPasswordEditTextLayout, mConfirmPasswordEditTextLayout, mNameEditTextLayout, mPhoneEditTextLayout;
+    EditText mEmailEditText, mPasswordEditText, mConfirmPasswordEditText, mNameEditText, mPhoneEditText;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,64 +47,29 @@ public class RegisterActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
+        mEmailEditTextLayout = (TextInputLayout) findViewById(R.id.etl_email);
         mEmailEditText = (EditText) findViewById(R.id.et_email);
+
+        mPasswordEditTextLayout = (TextInputLayout) findViewById(R.id.etl_password);
         mPasswordEditText = (EditText) findViewById(R.id.et_password);
+
+        mConfirmPasswordEditTextLayout = (TextInputLayout) findViewById(R.id.etl_confirm_password);
         mConfirmPasswordEditText = (EditText) findViewById(R.id.et_confirm_password);
+
+        mNameEditTextLayout = (TextInputLayout) findViewById(R.id.etl_name);
         mNameEditText = (EditText) findViewById(R.id.et_name);
+
+        mPhoneEditTextLayout = (TextInputLayout) findViewById(R.id.etl_phone);
         mPhoneEditText = (EditText) findViewById(R.id.et_phone);
 
         ((Button) findViewById(R.id.btn_register)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final ProgressDialog progressDialog = new ProgressDialog(v.getContext());
-                progressDialog.setMessage("Registering ...");
-                progressDialog.show();
-
-                boolean valid = true;
-
-                final String email = mEmailEditText.getText().toString();
-                if (!isValidEmail(email)) {
-                    mEmailEditText.setError("Enter a valid email address");
-                    valid = false;
-                }
-
-                final String password = mPasswordEditText.getText().toString();
-                if (password.isEmpty()) {
-                    mPasswordEditText.setError("Enter a password");
-                    valid = false;
-                }
-
-                final String confirmPassword = mConfirmPasswordEditText.getText().toString();
-                if (confirmPassword.isEmpty()) {
-                    mConfirmPasswordEditText.setError("Confirm your password");
-                    valid = false;
-                }
-
-                if (!password.equals(confirmPassword)) {
-                    Toast.makeText(RegisterActivity.this, "Passwords do no match", Toast.LENGTH_LONG).show();
-                    valid = false;
-                }
-
-                final String name = mNameEditText.getText().toString();
-                if (name.isEmpty() || !isValidName(name)) {
-                    mNameEditText.setError("Enter a valid name");
-                    valid = false;
-                }
-
-                final String phone = mPhoneEditText.getText().toString();
-                if (!isValidPhone(phone)) {
-                    mPhoneEditText.setError("Enter a valid mobile phone number");
-                    valid = false;
-                }
-
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                progressDialog.dismiss();
-                if (valid) {
+                if (isValidForm()) {
+                    final String email = mEmailEditText.getText().toString().trim();
+                    final String password = mPasswordEditText.getText().toString();
+                    final String name = mNameEditText.getText().toString().trim();
+                    final String phone = mPhoneEditText.getText().toString().trim();
                     mAuth.createUserWithEmailAndPassword(email, password)
                             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                 @Override
@@ -116,6 +89,8 @@ public class RegisterActivity extends AppCompatActivity {
                                     }
                                 }
                             });
+                } else {
+                    Toast.makeText(RegisterActivity.this, "Registration failed!", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -128,6 +103,12 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
+    public static boolean isOnline(Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isAvailable() && networkInfo.isConnected();
+    }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -138,14 +119,56 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    private boolean isValidName(String name) {
-        String pattern = "^[A-Za-z]+[A-Za-z- ]*[A-Za-z]+$";
-        return Pattern.compile(pattern).matcher(name).matches();
+    private boolean isValidForm() {
+        boolean valid = true;
+        if (!isValidEmail(mEmailEditText.getText().toString().trim())) {
+            mEmailEditTextLayout.setError(getString(R.string.error_email));
+            valid = false;
+        } else {
+            mEmailEditTextLayout.setErrorEnabled(false);
+        }
+        String password = mPasswordEditText.getText().toString();
+        if (!isValidPassword(password)) {
+            mPasswordEditTextLayout.setError(getString(R.string.error_password));
+            valid = false;
+        } else {
+            mPasswordEditTextLayout.setErrorEnabled(false);
+        }
+        String confirm_password = mConfirmPasswordEditText.getText().toString();
+        if (confirm_password.isEmpty() || !password.equals(confirm_password)) {
+            mConfirmPasswordEditTextLayout.setError(getString(R.string.error_confirm_password));
+            valid = false;
+        } else {
+            mConfirmPasswordEditTextLayout.setErrorEnabled(false);
+        }
+        if (!isValidName(mNameEditText.getText().toString().trim())) {
+            mNameEditTextLayout.setError(getString(R.string.error_name));
+            valid = false;
+        } else {
+            mNameEditTextLayout.setErrorEnabled(false);
+        }
+        if (!isValidPhone(mPhoneEditText.getText().toString().trim())) {
+            mPhoneEditTextLayout.setError(getString(R.string.error_phone));
+            valid = false;
+        } else {
+            mPhoneEditTextLayout.setErrorEnabled(false);
+        }
+        return valid;
     }
 
     private boolean isValidEmail(String email) {
-        String pattern = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-        return Pattern.compile(pattern).matcher(email).matches();
+        final String pattern = "^[_AZaz09\\+]+(\\.[_AZaz09]+)*@[AZaz09]+(\\.[AZaz09]+)*(\\.[AZaz]{2,})$";
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+
+    private boolean isValidPassword(String password) {
+        final String pattern = "^(?=.*\\d)(?=.*[a-zA-Z])[a-zA-Z0-9 ]{8,}$";
+        return Pattern.compile(pattern).matcher(password).matches();
+    }
+
+    private boolean isValidName(String name) {
+        final String pattern = "^[AZaz]+[AZaz -]*[AZaz]*$";
+        return Pattern.compile(pattern).matcher(name).matches();
     }
 
     private boolean isValidPhone(String phone) {
