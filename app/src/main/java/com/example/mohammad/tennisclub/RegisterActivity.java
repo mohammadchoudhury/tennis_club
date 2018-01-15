@@ -167,7 +167,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private boolean isValidName(String name) {
-        final String pattern = "^[AZaz]+[AZaz -]*[AZaz]*$";
+        final String pattern = "^[A-Za-z]+[A-Za-z -]*[A-Za-z]*$";
         return Pattern.compile(pattern).matcher(name).matches();
     }
 
