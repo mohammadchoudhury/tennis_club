@@ -21,7 +21,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    //andorid support
+    // andorid support
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support:design:26.1.0'
     implementation 'com.android.support:support-v4:26.1.0'
@@ -31,6 +31,9 @@ dependencies {
     // firebase library
     implementation 'com.google.firebase:firebase-auth:11.0.4'
     implementation 'com.google.firebase:firebase-database:11.0.4'
+
+    // fab library
+    implementation 'com.github.clans:fab:1.6.4'
 
     testImplementation 'junit:junit:4.12'
 

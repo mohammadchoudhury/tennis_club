@@ -1,6 +1,7 @@
 package com.example.mohammad.tennisclub;
 
 import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,6 +17,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mohammad.tennisclub.model.User;
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
+import com.github.clans.fab.Label;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -99,6 +103,16 @@ public class HomeActivity extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void createBooking(View v) {
+        String sessionType;
+        if (v instanceof  Label) {
+            sessionType = ((Label) v).getText().toString();
+        } else {
+            sessionType = ((FloatingActionButton) v).getLabelText();
+        }
+        Snackbar.make(v, sessionType, Snackbar.LENGTH_LONG).show();
     }
 
     private class LVAdapter extends BaseAdapter {
