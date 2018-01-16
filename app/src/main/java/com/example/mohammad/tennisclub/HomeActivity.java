@@ -65,6 +65,11 @@ public class HomeActivity extends AppCompatActivity {
         LVAdapter bookingsAdapter = new LVAdapter(bookings);
         ListView bookingsListView = (ListView) findViewById(R.id.lv_bookings);
         bookingsListView.setAdapter(bookingsAdapter);
+        bookingsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView parent, View v, int position, long id) {
+                Toast.makeText(parent.getContext(), "Clicked booking " + ++position, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     @Override
@@ -129,13 +134,6 @@ public class HomeActivity extends AppCompatActivity {
             ((TextView) listItemView.findViewById(R.id.tv_item_session_type)).setText(booking[1]);
             ((TextView) listItemView.findViewById(R.id.tv_item_date)).setText(booking[2]);
             ((TextView) listItemView.findViewById(R.id.tv_item_time)).setText(booking[3]);
-
-            AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
-                public void onItemClick(AdapterView parent, View v, int position, long id) {
-                    Toast.makeText(parent.getContext(), "Clicked booking " + ++position, Toast.LENGTH_LONG).show();
-                }
-            };
-            ((ListView) parent).setOnItemClickListener(itemClickListener);
             return listItemView;
         }
 
