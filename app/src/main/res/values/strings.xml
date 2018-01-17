@@ -35,6 +35,8 @@
     <string name="error_confirm_password">Passwords do not match</string>
     <string name="error_name">Enter a valid name (John Doe)</string>
     <string name="error_phone">Enter a valid UK mobile phone number (07912346578)</string>
+    <string name="error_user_does_not_exist">User does not exist</string>
+    <string name="error_password_incorrect">Password is incorrect</string>
 
     <!--Tab Headers-->
     <string name="tab_bookings_previous">Previous</string>

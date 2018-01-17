@@ -1,7 +1,6 @@
 package com.example.mohammad.tennisclub;
 
 import android.content.Intent;
-import android.content.res.Resources;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -17,7 +16,6 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.mohammad.tennisclub.model.User;
 import com.github.clans.fab.FloatingActionButton;
@@ -53,7 +51,6 @@ public class HomeActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(HomeActivity.this, databaseError.getDetails(), Toast.LENGTH_LONG).show();
             }
         });
 
