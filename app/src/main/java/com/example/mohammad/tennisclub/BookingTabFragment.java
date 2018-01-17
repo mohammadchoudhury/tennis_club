@@ -11,6 +11,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.clans.fab.FloatingActionMenu;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -60,7 +62,6 @@ public class BookingTabFragment extends Fragment {
                     "Court 3|Single Session|20 Dec 2017|16:00",
                     "Court 4|Private Session|18 Dec 2017|19:00"
             ));
-            rootView.findViewById(R.id.fab).setVisibility(View.GONE);
         }
         LVAdapter bookingsAdapter = new LVAdapter(bookings);
         ListView bookingsListView = (ListView) rootView.findViewById(R.id.lv_bookings);
