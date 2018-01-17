@@ -4,7 +4,7 @@
     <!--Activity Titles-->
     <string name="title_activity_register">Register</string>
     <string name="title_activity_login">Login</string>
-    <string name="title_activity_home">Home</string>
+    <string name="title_activity_home">Bookings</string>
 
     <!--Action Menu-->
     <string name="action_logout">Logout</string>
@@ -35,4 +35,8 @@
     <string name="error_confirm_password">Passwords do not match</string>
     <string name="error_name">Enter a valid name (John Doe)</string>
     <string name="error_phone">Enter a valid UK mobile phone number (07912346578)</string>
+
+    <!--Tab Headers-->
+    <string name="tab_bookings_previous">Previous</string>
+    <string name="tab_bookings_upcoming">Upcoming</string>
 </resources>

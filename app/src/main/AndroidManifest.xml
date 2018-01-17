@@ -22,6 +22,7 @@
             android:screenOrientation="userPortrait" />
         <activity
             android:name=".HomeActivity"
+            android:label="@string/title_activity_home"
             android:screenOrientation="userPortrait" />
     </application>
 
