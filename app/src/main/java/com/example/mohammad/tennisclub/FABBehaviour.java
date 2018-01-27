@@ -5,10 +5,8 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionMenu;
-
 
 /**
  * Created by mohammad on 16/01/18.
@@ -32,5 +30,14 @@ public class FABBehaviour extends CoordinatorLayout.Behavior<FloatingActionMenu>
             child.setTranslationY(translationY);
         }
         return true;
+    }
+
+    @Override
+    public void onDependentViewRemoved(CoordinatorLayout parent, FloatingActionMenu child, View dependency) {
+        if (dependency instanceof Snackbar.SnackbarLayout) {
+            float translationY = Math.max(0, dependency.getTranslationY() - dependency.getHeight());
+            child.setTranslationY(translationY);
+        }
+
     }
 }
