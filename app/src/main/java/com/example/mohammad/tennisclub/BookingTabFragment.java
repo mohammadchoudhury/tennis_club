@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,7 +24,8 @@ public class BookingTabFragment extends Fragment {
 
     private static final String ARG_POSITION = "position";
 
-    public BookingTabFragment() {}
+    public BookingTabFragment() {
+    }
 
     public static BookingTabFragment newInstance(int position) {
         BookingTabFragment fragment = new BookingTabFragment();
@@ -52,12 +54,12 @@ public class BookingTabFragment extends Fragment {
             ));
         } else {
             bookings.addAll(Arrays.asList(
-                    "Court 1|Normal Session|05 Jan 2018|18:00",
+                    "Court 1|Normal Session|15 Jan 2018|18:00",
                     "Court 2|Group Session|10 Jan 2018|15:00",
-                    "Court 1|Single Session|08 Jan 2018|12:00",
-                    "Court 4|Single Session|03 Jan 2018|11:00",
+                    "Court 1|Normal Session|08 Jan 2018|12:00",
+                    "Court 4|Private Session|03 Jan 2018|11:00",
                     "Court 2|Private Session|28 Dec 2017|13:00",
-                    "Court 3|Single Session|20 Dec 2017|16:00",
+                    "Court 3|Group Session|20 Dec 2017|16:00",
                     "Court 4|Private Session|18 Dec 2017|19:00"
             ));
         }
@@ -105,6 +107,17 @@ public class BookingTabFragment extends Fragment {
             ((TextView) listItemView.findViewById(R.id.tv_item_session_type)).setText(booking[1]);
             ((TextView) listItemView.findViewById(R.id.tv_item_date)).setText(booking[2]);
             ((TextView) listItemView.findViewById(R.id.tv_item_time)).setText(booking[3]);
+            ImageView sessionImage = listItemView.findViewById(R.id.iv_session_icon);
+            switch (booking[1]) {
+                case "Normal Session":
+                    sessionImage.setImageResource(R.drawable.ic_court);
+                    break;
+                case "Group Session":
+                    sessionImage.setImageResource(R.drawable.ic_balls);
+                    break;
+                default:
+                    sessionImage.setImageResource(R.drawable.ic_racket);
+            }
             return listItemView;
         }
 
