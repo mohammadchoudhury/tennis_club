@@ -1,6 +1,7 @@
 package com.example.mohammad.tennisclub;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -8,7 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -36,7 +37,10 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.activity_main);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
@@ -118,7 +122,7 @@ public class HomeActivity extends AppCompatActivity {
 
     public void createBooking(View v) {
         String sessionType;
-        if (v instanceof  Label) {
+        if (v instanceof Label) {
             sessionType = ((Label) v).getText().toString();
         } else {
             sessionType = ((FloatingActionButton) v).getLabelText();
@@ -135,7 +139,7 @@ public class HomeActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            return new BookingTabFragment().newInstance(position) ;
+            return new BookingTabFragment().newInstance(position);
         }
 
         @Override

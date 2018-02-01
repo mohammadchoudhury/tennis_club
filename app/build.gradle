@@ -35,6 +35,9 @@ dependencies {
     // fab library
     implementation 'com.github.clans:fab:1.6.4'
 
+    // circle image view library
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
+
     testImplementation 'junit:junit:4.12'
 
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
