@@ -29,13 +29,16 @@ public class MainActivity extends AppCompatActivity {
     private final static String FRAGTAG = "NavDrawFragment";
 
     private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthStateListener;
+    private ValueEventListener mValueEventListener;
+    private DatabaseReference userRef;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         mAuth = FirebaseAuth.getInstance();
-        mAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
@@ -44,12 +47,12 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 }
             }
-        });
+        };
 
         FirebaseUser user = mAuth.getCurrentUser();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference userRef = database.getReference("users/" + user.getUid());
-        userRef.addValueEventListener(new ValueEventListener() {
+        userRef = database.getReference("users/" + user.getUid());
+        mValueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User cUser = dataSnapshot.getValue(User.class);
@@ -59,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {}
-        });
+        };
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -76,7 +79,6 @@ public class MainActivity extends AppCompatActivity {
         Menu navMenu = navigationView.getMenu();
         navMenu.findItem(R.id.nav_chat).setEnabled(false);
         navMenu.findItem(R.id.nav_payment).setEnabled(false);
-        navMenu.findItem(R.id.nav_account).setEnabled(false);
         navMenu.findItem(R.id.nav_settings).setEnabled(false);
         navMenu.findItem(R.id.nav_about).setEnabled(false);
         navMenu.findItem(R.id.nav_feedback).setEnabled(false);
@@ -111,6 +113,9 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.nav_payment:
                         break;
                     case R.id.nav_account:
+                        if (!(getSupportFragmentManager().findFragmentByTag(FRAGTAG) instanceof AccountFragment)) {
+                            fragment = new AccountFragment();
+                        }
                         break;
                     case R.id.nav_logout:
                         mAuth.signOut();
@@ -138,6 +143,20 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         };
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mAuth.addAuthStateListener(mAuthStateListener);
+        userRef.addValueEventListener(mValueEventListener);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        userRef.removeEventListener(mValueEventListener);
+        mAuth.removeAuthStateListener(mAuthStateListener);
     }
 
 }
