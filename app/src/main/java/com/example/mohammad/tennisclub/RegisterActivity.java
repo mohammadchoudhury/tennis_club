@@ -74,7 +74,7 @@ public class RegisterActivity extends AppCompatActivity {
                                         User newUser = new User(email, name, phone);
                                         usersRef.child(user.getUid()).setValue(newUser);
                                         finish();
-                                        startActivity(new Intent(RegisterActivity.this, HomeActivity.class));
+                                        startActivity(new Intent(RegisterActivity.this, MainActivity.class));
                                     } else {
                                         if (task.getException() instanceof FirebaseAuthUserCollisionException) {
                                             Toast.makeText(RegisterActivity.this, "User already exists", Toast.LENGTH_LONG).show();
@@ -100,16 +100,6 @@ public class RegisterActivity extends AppCompatActivity {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         return networkInfo != null && networkInfo.isAvailable() && networkInfo.isConnected();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (null != currentUser) {
-            finish();
-            startActivity(new Intent(RegisterActivity.this, HomeActivity.class));
-        }
     }
 
     private boolean isValidForm() {

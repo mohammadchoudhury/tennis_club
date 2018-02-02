@@ -45,4 +45,9 @@
     <!--Tab Headers-->
     <string name="tab_bookings_previous">Previous</string>
     <string name="tab_bookings_upcoming">Upcoming</string>
+
+    <!--Navigation Drawer-->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
 </resources>

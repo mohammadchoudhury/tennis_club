@@ -1,19 +1,16 @@
 package com.example.mohammad.tennisclub;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
@@ -30,17 +27,19 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeFragment extends Fragment {
 
     FirebaseAuth mAuth;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    }
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        final View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
@@ -50,7 +49,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User cUser = dataSnapshot.getValue(User.class);
-                ((TextView) findViewById(R.id.tv_name)).setText("Welcome, " + cUser.getName());
+                ((TextView) rootView.findViewById(R.id.tv_name)).setText("Welcome, " + cUser.getName());
             }
 
             @Override
@@ -60,15 +59,15 @@ public class HomeActivity extends AppCompatActivity {
 
         // Create the adapter that will return a fragment for each of the two
         // primary sections of the activity.
-        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getChildFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        ViewPager viewPager = (ViewPager) findViewById(R.id.container);
+        ViewPager viewPager = (ViewPager) rootView.findViewById(R.id.container);
         viewPager.setAdapter(sectionsPagerAdapter);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        TabLayout tabLayout = (TabLayout) rootView.findViewById(R.id.tabs);
 
-        final FloatingActionMenu fab = findViewById(R.id.fab);
+        final FloatingActionMenu fab = rootView.findViewById(R.id.fab);
         fab.setClosedOnTouchOutside(true);
 
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
@@ -77,11 +76,11 @@ public class HomeActivity extends AppCompatActivity {
             public void onTabSelected(TabLayout.Tab tab) {
                 super.onTabSelected(tab);
                 if (tab.getPosition() == 0) {
-                    Animation fadeIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
+                    Animation fadeIn = AnimationUtils.loadAnimation(getContext(), R.anim.fade_in);
                     fab.setVisibility(View.VISIBLE);
                     fab.startAnimation(fadeIn);
                 } else {
-                    Animation fadeOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_out);
+                    Animation fadeOut = AnimationUtils.loadAnimation(getContext(), R.anim.fade_out);
                     fab.startAnimation(fadeOut);
                     fab.setVisibility(View.GONE);
 
@@ -89,36 +88,10 @@ public class HomeActivity extends AppCompatActivity {
             }
 
         });
+        
+        return rootView;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (null == currentUser) {
-            finish();
-            startActivity(new Intent(HomeActivity.this, LoginActivity.class));
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_logout:
-                mAuth.signOut();
-                finish();
-                startActivity(new Intent(this, LoginActivity.class));
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     public void createBooking(View v) {
         String sessionType;

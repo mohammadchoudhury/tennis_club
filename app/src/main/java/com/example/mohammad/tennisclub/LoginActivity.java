@@ -104,7 +104,7 @@ public class LoginActivity extends AppCompatActivity {
                                     if (task.isSuccessful()) {
                                         FirebaseUser user = mAuth.getCurrentUser();
                                         finish();
-                                        startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
                                     } else {
                                         if (task.getException() instanceof FirebaseAuthInvalidUserException) {
                                             Snackbar.make(v, getString(R.string.error_user_does_not_exist), Snackbar.LENGTH_SHORT).show();
@@ -134,7 +134,7 @@ public class LoginActivity extends AppCompatActivity {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (null != currentUser) {
             finish();
-            startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
         }
     }
 
