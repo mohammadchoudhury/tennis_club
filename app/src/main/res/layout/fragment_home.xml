@@ -84,10 +84,9 @@
         app:menu_showShadow="true">
 
         <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/menu_normal"
+            android:id="@+id/fab_normal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="createBooking"
             android:src="@drawable/ic_add_black_24dp"
             app:fab_colorNormal="@color/secondary"
             app:fab_colorPressed="@color/secondaryDark"
@@ -97,10 +96,9 @@
             app:fab_size="mini" />
 
         <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/menu_private"
+            android:id="@+id/fab_private"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="createBooking"
             android:src="@drawable/ic_add_black_24dp"
             app:fab_colorNormal="@color/secondary"
             app:fab_colorPressed="@color/secondaryDark"
@@ -110,10 +108,9 @@
             app:fab_size="mini" />
 
         <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/menu_group"
+            android:id="@+id/fab_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="createBooking"
             android:src="@drawable/ic_add_black_24dp"
             app:fab_colorNormal="@color/secondary"
             app:fab_colorPressed="@color/secondaryDark"

@@ -17,7 +17,7 @@ import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.github.clans.fab.Label;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -27,6 +27,11 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_home, container, false);
+
+        // Set click listener to call method createBooking
+        rootView.findViewById(R.id.fab_normal).setOnClickListener(this);
+        rootView.findViewById(R.id.fab_private).setOnClickListener(this);
+        rootView.findViewById(R.id.fab_group).setOnClickListener(this);
 
         // Create the adapter that will return a fragment for each of the two
         // primary sections of the activity.
@@ -62,8 +67,7 @@ public class HomeFragment extends Fragment {
     }
 
     /**
-     * Action for fab menu item onClickListener assigned in xml
-     *
+     * Show snack bar message of fab item clicked
      * @param v
      */
     public void createBooking(View v) {
@@ -75,7 +79,12 @@ public class HomeFragment extends Fragment {
         }
         Snackbar.make(v, sessionType, Snackbar.LENGTH_LONG).show();
     }
-    
+
+    @Override
+    public void onClick(View v) {
+        createBooking(v);
+    }
+
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         public SectionsPagerAdapter(FragmentManager fm) {
