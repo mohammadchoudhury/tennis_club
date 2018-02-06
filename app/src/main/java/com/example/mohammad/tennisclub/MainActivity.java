@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private ValueEventListener mValueEventListener;
-    private DatabaseReference userRef;
+    private DatabaseReference mUserRef;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
         FirebaseUser user = mAuth.getCurrentUser();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        userRef = database.getReference("users/" + user.getUid());
+        mUserRef = database.getReference("users/" + user.getUid());
         mValueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -61,7 +61,8 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {}
+            public void onCancelled(DatabaseError databaseError) {
+            }
         };
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -86,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
         navMenu.findItem(R.id.nav_chat).setEnabled(false);
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.fragment_container, new HomeFragment(), FRAGTAG);
+        fragmentTransaction.replace(R.id.fragment_container, new HomeFragment(), FRAGTAG);
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         fragmentTransaction.commit();
     }
@@ -149,14 +150,24 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         mAuth.addAuthStateListener(mAuthStateListener);
-        userRef.addValueEventListener(mValueEventListener);
+        mUserRef.addValueEventListener(mValueEventListener);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        userRef.removeEventListener(mValueEventListener);
+        mUserRef.removeEventListener(mValueEventListener);
         mAuth.removeAuthStateListener(mAuthStateListener);
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
 
 }

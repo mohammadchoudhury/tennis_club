@@ -1,6 +1,7 @@
 package com.example.mohammad.tennisclub;
 
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -18,11 +19,6 @@ import com.github.clans.fab.FloatingActionMenu;
 import com.github.clans.fab.Label;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -66,8 +62,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         return rootView;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((NavigationView) getActivity().findViewById(R.id.nav_view)).setCheckedItem(R.id.nav_home);
+    }
+
     /**
      * Show snack bar message of fab item clicked
+     *
      * @param v
      */
     public void createBooking(View v) {
