@@ -104,14 +104,14 @@ public class RegisterActivity extends AppCompatActivity {
 
     private boolean isValidForm() {
         boolean valid = true;
-        if (!isValidEmail(mEmailEditText.getText().toString().trim())) {
+        if (!Utility.isValidEmail(mEmailEditText.getText().toString().trim())) {
             mEmailEditTextLayout.setError(getString(R.string.error_email));
             valid = false;
         } else {
             mEmailEditTextLayout.setErrorEnabled(false);
         }
         String password = mPasswordEditText.getText().toString();
-        if (!isValidPassword(password)) {
+        if (!Utility.isValidPassword(password)) {
             mPasswordEditTextLayout.setError(getString(R.string.error_password));
             valid = false;
         } else {
@@ -124,39 +124,19 @@ public class RegisterActivity extends AppCompatActivity {
         } else {
             mConfirmPasswordEditTextLayout.setErrorEnabled(false);
         }
-        if (!isValidName(mNameEditText.getText().toString().trim())) {
+        if (!Utility.isValidName(mNameEditText.getText().toString().trim())) {
             mNameEditTextLayout.setError(getString(R.string.error_name));
             valid = false;
         } else {
             mNameEditTextLayout.setErrorEnabled(false);
         }
-        if (!isValidPhone(mPhoneEditText.getText().toString().trim())) {
+        if (!Utility.isValidPassword(mPhoneEditText.getText().toString().trim())) {
             mPhoneEditTextLayout.setError(getString(R.string.error_phone));
             valid = false;
         } else {
             mPhoneEditTextLayout.setErrorEnabled(false);
         }
         return valid;
-    }
-
-    private boolean isValidEmail(String email) {
-        final String pattern = "^[_AZaz09\\+]+(\\.[_AZaz09]+)*@[AZaz09]+(\\.[AZaz09]+)*(\\.[AZaz]{2,})$";
-        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
-    }
-
-    private boolean isValidPassword(String password) {
-        final String pattern = "^(?=.*\\d)(?=.*[a-zA-Z])[a-zA-Z0-9 ]{8,}$";
-        return Pattern.compile(pattern).matcher(password).matches();
-    }
-
-    private boolean isValidName(String name) {
-        final String pattern = "^[A-Za-z]+[A-Za-z -]*[A-Za-z]*$";
-        return Pattern.compile(pattern).matcher(name).matches();
-    }
-
-    private boolean isValidPhone(String phone) {
-        String pattern = "^(\\+44(0)?|0)7\\d{9}$";
-        return Pattern.compile(pattern).matcher(phone).matches();
     }
 
 }

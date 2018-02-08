@@ -59,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
                             public void onClick(final View view) {
                                 String emailReset = ((TextInputEditText) alertView.findViewById(R.id.et_email_reset)).getText().toString();
                                 final TextInputLayout emailResetLayout = alertView.findViewById(R.id.etl_email_reset);
-                                if (isValidEmail(emailReset.trim())) {
+                                if (Utility.isValidEmail(emailReset.trim())) {
                                     ((EditText) findViewById(R.id.et_email)).setText(emailReset);
                                     mAuth.sendPasswordResetEmail(emailReset)
                                             .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -140,7 +140,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private boolean isValidForm() {
         boolean valid = true;
-        if (!isValidEmail(mEmailEditText.getText().toString().trim())) {
+        if (!Utility.isValidEmail(mEmailEditText.getText().toString().trim())) {
             mEmailEditTextLayout.setError(getString(R.string.error_email));
             valid = false;
         } else {
@@ -154,11 +154,6 @@ public class LoginActivity extends AppCompatActivity {
             mPasswordEditTextLayout.setErrorEnabled(false);
         }
         return valid;
-    }
-
-
-    private boolean isValidEmail(String email) {
-        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
 }
