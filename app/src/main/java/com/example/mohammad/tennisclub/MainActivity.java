@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -25,8 +26,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
-
-    private final static String FRAGTAG = "NavDrawFragment";
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
@@ -87,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         navMenu.findItem(R.id.nav_chat).setEnabled(false);
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, new HomeFragment(), FRAGTAG);
+        fragmentTransaction.replace(R.id.fragment_container, new HomeFragment());
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         fragmentTransaction.commit();
     }
@@ -105,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
                 Fragment fragment = null;
                 switch (id) {
                     case R.id.nav_home:
-                        if (!(getSupportFragmentManager().findFragmentByTag(FRAGTAG) instanceof HomeFragment)) {
+                        if (!(getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof HomeFragment)) {
                             fragment = new HomeFragment();
                         }
                         break;
@@ -114,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.nav_payment:
                         break;
                     case R.id.nav_account:
-                        if (!(getSupportFragmentManager().findFragmentByTag(FRAGTAG) instanceof AccountFragment)) {
+                        if (!(getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof AccountFragment)) {
                             fragment = new AccountFragment();
                         }
                         break;
@@ -133,8 +132,8 @@ public class MainActivity extends AppCompatActivity {
 
                 if (fragment != null) {
                     FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.fragment_container, fragment, FRAGTAG);
-                    fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_NONE);
+                    fragmentTransaction.replace(R.id.fragment_container, fragment);
+                    fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE );
                     fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
                 }
