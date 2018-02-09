@@ -11,7 +11,7 @@ public final class Utility {
     }
 
     public static boolean isValidPassword(String password) {
-        final String pattern = "^(?=.*\\d)(?=.*[a-zA-Z])[a-zA-Z0-9 ]{8,}$";
+        final String pattern = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9 ]{8,}$";
         return Pattern.compile(pattern).matcher(password).matches();
     }
 
