@@ -13,9 +13,9 @@
     <string name="image_description_profile_pic">Profile Picture</string>
 
     <!--Text-->
-    <string name="text_login"><b>Login</b></string>
-    <string name="text_register"><b>Register</b></string>
-    <string name="text_account"><b>Account</b></string>
+    <string name="text_login">Login</string>
+    <string name="text_register">Register</string>
+    <string name="text_account">Account</string>
     <string name="text_login_other">Sign in with</string>
     <string name="text_register_other">Sign up with</string>
     <string name="text_facebook" translatable="false">Facebook</string>
