@@ -1,8 +1,9 @@
 package com.example.mohammad.tennisclub;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,20 +15,11 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
-import com.github.clans.fab.FloatingActionButton;
-import com.github.clans.fab.FloatingActionMenu;
-import com.github.clans.fab.Label;
-
-public class HomeFragment extends Fragment implements View.OnClickListener {
+public class HomeFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_home, container, false);
-
-        // Set click listener to call method createBooking
-        rootView.findViewById(R.id.fab_normal).setOnClickListener(this);
-        rootView.findViewById(R.id.fab_private).setOnClickListener(this);
-        rootView.findViewById(R.id.fab_group).setOnClickListener(this);
 
         // Create the adapter that will return a fragment for each of the two
         // primary sections of the activity.
@@ -39,8 +31,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         TabLayout tabLayout = (TabLayout) rootView.findViewById(R.id.tabs);
 
-        final FloatingActionMenu fab = rootView.findViewById(R.id.fab);
-        fab.setClosedOnTouchOutside(true);
+        final FloatingActionButton fab = rootView.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), BookingActivity.class));
+            }
+        });
 
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager) {
@@ -68,27 +65,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         ((NavigationView) getActivity().findViewById(R.id.nav_view)).setCheckedItem(R.id.nav_home);
     }
 
-    /**
-     * Show snack bar message of fab item clicked
-     *
-     * @param v
-     */
-    public void createBooking(View v) {
-        String sessionType;
-        if (v instanceof Label) {
-            sessionType = ((Label) v).getText().toString();
-        } else {
-            sessionType = ((FloatingActionButton) v).getLabelText();
-        }
-        Snackbar.make(v, sessionType, Snackbar.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onClick(View v) {
-        createBooking(v);
-    }
-
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+    public static class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);

@@ -26,14 +26,11 @@ dependencies {
     implementation 'com.android.support:design:26.1.0'
     implementation 'com.android.support:support-v4:26.1.0'
     implementation 'com.android.support:support-vector-drawable:26.1.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.0-beta4'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.0-beta5'
 
     // firebase library
-    implementation 'com.google.firebase:firebase-auth:11.0.4'
-    implementation 'com.google.firebase:firebase-database:11.0.4'
-
-    // fab library
-    implementation 'com.github.clans:fab:1.6.4'
+    implementation 'com.google.firebase:firebase-auth:11.8.0'
+    implementation 'com.google.firebase:firebase-database:11.8.0'
 
     // circle image view library
     implementation 'de.hdodenhof:circleimageview:2.2.0'
