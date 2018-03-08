@@ -14,5 +14,10 @@ public class BookingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_booking);
 
         ((BottomNavigationView) findViewById(R.id.bottom_navigation)).setSelectedItemId(R.id.nav_normal);
+
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, new NormalBookingFragment());
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        fragmentTransaction.commit();
     }
 }
