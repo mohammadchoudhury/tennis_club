@@ -60,16 +60,9 @@ public class NormalBookingFragment extends Fragment {
         mDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int day) {
-                switch (mOptions.size()) {
-                    case 3:
-                        mOptions.set(2, "Choose a court");
-                    case 2:
-                        mOptions.set(1, "Choose a time");
-                        mCalendar.clear();
-                        break;
-                    default:
-                        mOptions.add(1, "Choose a time");
-                }
+                while (mOptions.size() > 1) mOptions.remove(1);
+                mCalendar.clear();
+                mOptions.add("Choose a time");
                 mCalendar.set(year, month, day);
                 String dateString = mCalendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.ENGLISH) + ", "
                         + mCalendar.get(Calendar.DAY_OF_MONTH) + " "
@@ -133,17 +126,8 @@ public class NormalBookingFragment extends Fragment {
                             mCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
                             mCalendar.set(Calendar.MINUTE, 0);
                             mOptions.set(1, times[which]);
-                            if (mOptions.size() == 3) {
-                                mOptions.set(2, "Choose a court");
-                            } else {
-                                mOptions.add(2, "Choose a court");
-                            }
-                            String dateString = mCalendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.ENGLISH) + ", "
-                                    + mCalendar.get(Calendar.DAY_OF_MONTH) + " "
-                                    + mCalendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.ENGLISH) + " "
-                                    + mCalendar.get(Calendar.YEAR) + " "
-                                    + mCalendar.get(Calendar.HOUR_OF_DAY) + " "
-                                    + mCalendar.get(Calendar.MINUTE);
+                            while (mOptions.size() > 2) mOptions.remove(2);
+                            mOptions.add("Choose a court");
                             mOptionsAdapter.notifyDataSetChanged();
                         }
                     })
