@@ -37,7 +37,7 @@ public class NormalBookingFragment extends Fragment {
 
         mCalendar = Calendar.getInstance();
 
-        mOptionsAdapter = new ArrayAdapter<String>(getContext(), R.layout.centred_list_item, mOptions);
+        mOptionsAdapter = new ArrayAdapter<String>(getContext(), R.layout.list_item_centred, mOptions);
         ListView lv = rootView.findViewById(R.id.lv_booking_options);
         lv.setAdapter(mOptionsAdapter);
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -117,7 +117,7 @@ public class NormalBookingFragment extends Fragment {
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AppTheme_Dialog);
             final String[] times = {"09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00"};
-            ListAdapter timesAdapter = new ArrayAdapter<String>(getContext(), R.layout.centred_list_item, times);
+            ListAdapter timesAdapter = new ArrayAdapter<String>(getContext(), R.layout.list_item_centred, times);
             builder.setTitle("Choose a time")
                     .setAdapter(timesAdapter, new DialogInterface.OnClickListener() {
                         @Override
@@ -145,7 +145,7 @@ public class NormalBookingFragment extends Fragment {
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AppTheme_Dialog);
             final String[] courts = {"Court 1", "Court 2", "Court 3", "Court 4"};
-            ListAdapter courtsAdapter = new ArrayAdapter<String>(getContext(), R.layout.centred_list_item, courts);
+            ListAdapter courtsAdapter = new ArrayAdapter<String>(getContext(), R.layout.list_item_centred, courts);
             builder.setTitle("Choose a court")
                     .setAdapter(courtsAdapter, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {

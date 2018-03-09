@@ -100,7 +100,7 @@ public class BookingTabFragment extends Fragment {
         @Override
         public View getView(int position, View listItemView, ViewGroup parent) {
             if (listItemView == null) {
-                listItemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
+                listItemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_booking, parent, false);
             }
             final String[] booking = getItem(position).split("\\|");
             ((TextView) listItemView.findViewById(R.id.tv_item_court)).setText(booking[0]);
