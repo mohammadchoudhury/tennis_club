@@ -150,7 +150,7 @@ public class NormalBookingFragment extends Fragment {
             final String[] courts = {"Court 1", "Court 2", "Court 3", "Court 4"};
             ListAdapter courtsAdapter = new ArrayAdapter<String>(getContext(), R.layout.list_item_centred, courts);
             View title = View.inflate(getContext(), R.layout.dialog_title, null);
-            ((TextView) title.findViewById(R.id.title)).setText("Choose a time, please");
+            ((TextView) title.findViewById(R.id.title)).setText("Choose a court");
             builder.setCustomTitle(title)
                     .setAdapter(courtsAdapter, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
