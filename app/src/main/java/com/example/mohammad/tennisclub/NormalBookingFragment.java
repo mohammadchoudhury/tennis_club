@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -118,7 +119,9 @@ public class NormalBookingFragment extends Fragment {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AppTheme_Dialog);
             final String[] times = {"09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00"};
             ListAdapter timesAdapter = new ArrayAdapter<String>(getContext(), R.layout.list_item_centred, times);
-            builder.setTitle("Choose a time")
+            View title = View.inflate(getContext(), R.layout.dialog_title, null);
+            ((TextView) title.findViewById(R.id.title)).setText("Choose a time");
+            builder.setCustomTitle(title)
                     .setAdapter(timesAdapter, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -146,7 +149,9 @@ public class NormalBookingFragment extends Fragment {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AppTheme_Dialog);
             final String[] courts = {"Court 1", "Court 2", "Court 3", "Court 4"};
             ListAdapter courtsAdapter = new ArrayAdapter<String>(getContext(), R.layout.list_item_centred, courts);
-            builder.setTitle("Choose a court")
+            View title = View.inflate(getContext(), R.layout.dialog_title, null);
+            ((TextView) title.findViewById(R.id.title)).setText("Choose a time, please");
+            builder.setCustomTitle(title)
                     .setAdapter(courtsAdapter, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             mOptions.set(2, courts[which]);
