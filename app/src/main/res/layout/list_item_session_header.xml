@@ -4,10 +4,11 @@
     style="?android:attr/windowTitleStyle"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/secondary"
+    android:background="@android:color/darker_gray"
     android:ellipsize="end"
     android:gravity="center"
     android:padding="5dp"
     android:singleLine="true"
+    android:textStyle="bold"
     android:textAppearance="?android:attr/textAppearanceLarge"
     android:textColor="@android:color/white" />
