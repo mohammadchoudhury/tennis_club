@@ -6,16 +6,16 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
+import android.widget.BaseExpandableListAdapter;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mohammad.tennisclub.model.Session;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class SessionBookingFragment extends Fragment {
 
@@ -51,100 +51,124 @@ public class SessionBookingFragment extends Fragment {
             sessionImage.setImageResource(R.drawable.ic_balls);
         }
 
+        HashMap<String, ArrayList<Session>> session = new HashMap<>();
         ArrayList<Session> sessions = new ArrayList<>();
-        sessions.add(new Session("Monday, 19 Mar 2018"));
         sessions.add(new Session("Monday, 19 Mar 2018", "11:00"));
         sessions.add(new Session("Monday, 19 Mar 2018", "12:00"));
-        sessions.add(new Session("Tuesday, 20 Mar 2018"));
+        session.put("Monday, 19 Mar 2018", sessions);
+        sessions = new ArrayList<>();
         sessions.add(new Session("Tuesday, 20 Mar 2018", "09:00"));
         sessions.add(new Session("Tuesday, 20 Mar 2018", "12:00"));
         sessions.add(new Session("Tuesday, 20 Mar 2018", "15:00"));
-        sessions.add(new Session("Wednesday, 21 Mar 2018"));
-        sessions.add(new Session("Wednesday, 21 Mar 2018", "13:00"));
+        sessions.add(new Session("Tuesday, 20 Mar 2018", "18:00"));
+        session.put("Tuesday, 20 Mar 2018", sessions);
+        sessions = new ArrayList<>();
         sessions.add(new Session("Wednesday, 21 Mar 2018", "14:00"));
         sessions.add(new Session("Wednesday, 21 Mar 2018", "16:00"));
         sessions.add(new Session("Wednesday, 21 Mar 2018", "17:00"));
-        ListView listView = rootView.findViewById(R.id.lv_booking_options);
-        listView.setAdapter(new SessionAdapter(sessions));
+        session.put("Wednesday, 21 Mar 2018", sessions);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        ExpandableListView listView = rootView.findViewById(R.id.elv_booking_options);
+        listView.setAdapter(new ExpandableListAdapter(session));
+        listView.expandGroup(0);
+        listView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getContext(), "Clicked " + position, Toast.LENGTH_SHORT).show();
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                Toast.makeText(getContext(), "Clicked " + groupPosition + "." + childPosition, Toast.LENGTH_SHORT).show();
+                return false;
             }
         });
 
         return rootView;
     }
 
-    private class SessionAdapter extends BaseAdapter {
+    public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
-        public static final int TYPE_HEADER = 0;
-        public static final int TYPE_SESSION = 1;
-        private ArrayList<Session> sessions;
+        private HashMap<String, ArrayList<Session>> sessions;
 
-        public SessionAdapter(ArrayList<Session> sessions) {
+        public ExpandableListAdapter(HashMap<String, ArrayList<Session>> sessions) {
             this.sessions = sessions;
         }
 
         @Override
-        public int getItemViewType(int position) {
-            return sessions.get(position).getType() == Session.Type.HEADER ? TYPE_HEADER : TYPE_SESSION;
+        public Session getChild(int groupPosition, int childPosititon) {
+            return sessions.get(getKey(groupPosition)).get(childPosititon);
         }
 
         @Override
-        public int getViewTypeCount() {
-            return 2;
+        public long getChildId(int groupPosition, int childPosition) {
+            return getChild(groupPosition, childPosition).hashCode();
         }
 
         @Override
-        public int getCount() {
-            return sessions.size();
-        }
-
-        @Override
-        public Session getItem(int position) {
-            return sessions.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return sessions.get(position).hashCode();
-        }
-
-        @Override
-        public View getView(int position, View view, ViewGroup parent) {
+        public View getChildView(int groupPosition, final int childPosition, boolean isLastChild, View view, ViewGroup parent) {
             ViewHolder holder = null;
             if (view == null) {
                 holder = new ViewHolder();
-                switch (getItemViewType(position)) {
-                    case TYPE_HEADER:
-                        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_session_header, parent, false);
-                        view.setOnClickListener(null);
-                        holder.textView = view.findViewById(R.id.tv_header);
-                        break;
-                    case TYPE_SESSION:
-                        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_centred, parent, false);
-                        holder.textView = view.findViewById(R.id.tv_item);
-                        break;
-                }
+                view = getLayoutInflater().inflate(R.layout.list_item_centred, null);
+                holder.textView = view.findViewById(R.id.tv_item);
                 view.setTag(holder);
             } else {
                 holder = (ViewHolder) view.getTag();
             }
-            switch (getItemViewType(position)) {
-                case TYPE_HEADER:
-                    holder.textView.setText(getItem(position).getDate());
-                    break;
-                case TYPE_SESSION:
-                    holder.textView.setText(getItem(position).getTime());
-                    break;
-            }
+            Session session = getChild(groupPosition, childPosition);
+            holder.textView.setText(session.getTime());
             return view;
+        }
+
+        @Override
+        public int getChildrenCount(int groupPosition) {
+            return sessions.get(getKey(groupPosition)).size();
+        }
+
+        @Override
+        public Object getGroup(int groupPosition) {
+            return sessions.get(getKey(groupPosition));
+        }
+
+        @Override
+        public int getGroupCount() {
+            return sessions.size();
+        }
+
+        @Override
+        public long getGroupId(int groupPosition) {
+            return getGroup(groupPosition).hashCode();
+        }
+
+        @Override
+        public View getGroupView(int groupPosition, boolean isExpanded, View view, ViewGroup parent) {
+            ViewHolder holder = null;
+            if (view == null) {
+                holder = new ViewHolder();
+                view = getLayoutInflater().inflate(R.layout.list_item_session_header, null);
+                holder.textView = view.findViewById(R.id.tv_header);
+                view.setTag(holder);
+            } else {
+                holder = (ViewHolder) view.getTag();
+            }
+            String sessionDate = (String) sessions.keySet().toArray()[groupPosition];
+            holder.textView.setText(sessionDate);
+            return view;
+        }
+
+        @Override
+        public boolean hasStableIds() {
+            return false;
+        }
+
+        @Override
+        public boolean isChildSelectable(int groupPosition, int childPosition) {
+            return true;
+        }
+
+        private String getKey(int groupPosition) {
+            return (String) sessions.keySet().toArray()[groupPosition];
         }
 
         private class ViewHolder {
             public TextView textView;
         }
     }
+
 }

@@ -14,10 +14,9 @@
         android:adjustViewBounds="true"
         android:scaleType="fitStart" />
 
-    <ListView
-        android:id="@+id/lv_booking_options"
+    <ExpandableListView
+        android:id="@+id/elv_booking_options"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
-
 </LinearLayout>
