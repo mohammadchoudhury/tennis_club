@@ -1,56 +1,71 @@
 package com.example.mohammad.tennisclub.model;
 
-/**
- * Created by mohammad on 09/03/18.
- */
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class Session {
 
-    public enum Type {
-        HEADER,
-        SESSION
-    }
-
-    private Type type;
-    private String date;
-    private String time;
+    private String ID;
+    private String type;
+    private Date date;
+    private double price;
 
     public Session() {
     }
 
-    public Session(String date) {
-        this.date = date;
-        this.type = Type.HEADER;
+    public String getID() {
+        return ID;
     }
 
-    public Session(String date, String time) {
-        this.date = date;
-        this.time = time;
-        this.type = Type.SESSION;
+    public void setID(String ID) {
+        this.ID = ID;
     }
 
-    public Type getType() {
-        return type;
-    }
-
-    public void setType(Type type) {
-        this.type = type;
-    }
-
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public String getDateString() {
+        SimpleDateFormat sdf = new SimpleDateFormat("E, d MMM yyyy", Locale.UK);
+        return sdf.format(date);
+    }
+
+    public String getTimeString() {
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.UK);
+        return sdf.format(date);
+    }
+
+    public void setDate(Date date) {
         this.date = date;
     }
 
-    public String getTime() {
-        return time;
+    public void setDateString(String date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.UK);
+        Date d = new Date();
+        try {
+            d = sdf.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        this.date = d;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 
 }

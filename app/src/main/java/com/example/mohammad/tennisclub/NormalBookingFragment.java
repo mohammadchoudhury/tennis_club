@@ -3,24 +3,42 @@ package com.example.mohammad.tennisclub;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class NormalBookingFragment extends Fragment {
 
@@ -28,6 +46,8 @@ public class NormalBookingFragment extends Fragment {
     static Calendar mCalendar;
     static ArrayList<String> mOptions;
     static ArrayAdapter mOptionsAdapter;
+//    static ArrayList<String> mTimesTaken;
+    static ArrayList<String> mCourtsTaken;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -71,6 +91,26 @@ public class NormalBookingFragment extends Fragment {
                         + mCalendar.get(Calendar.YEAR);
                 mOptions.set(0, dateString);
                 mOptionsAdapter.notifyDataSetChanged();
+
+//                FirebaseFirestore fsdb = FirebaseFirestore.getInstance();
+//                Date nDate = mCalendar.getTime();
+//                nDate.setTime(mCalendar.getTimeInMillis() + 86400000);
+//                fsdb.collection("bookings")
+//                        .whereGreaterThanOrEqualTo("date", mCalendar.getTime())
+//                        .whereLessThan("date", nDate)
+//                        .addSnapshotListener(new EventListener<QuerySnapshot>() {
+//                            @Override
+//                            public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
+//                                mTimesTaken = new ArrayList<>();
+//                                for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+//                                    Map booking = document.getData();
+//                                    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.UK);
+//                                    String time = sdf.format(booking.get("date"));
+//                                    mTimesTaken.add(time);
+//                                }
+//                            }
+//                        });
+
             }
         };
 
@@ -79,6 +119,7 @@ public class NormalBookingFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         String msg = "";
+                        boolean valid = false;
                         if (mOptions.get(0).equals("Choose a date")) {
                             msg = "You must choose a date";
                         } else if (mOptions.get(1).equals("Choose a time")) {
@@ -88,9 +129,29 @@ public class NormalBookingFragment extends Fragment {
                         } else if (mOptions.get(2).equals("Choose a court")) {
                             msg = "You must choose a court";
                         } else {
-                            msg = "Booking VALID";
+                            valid = true;
                         }
-                        Snackbar.make(rootView, msg, Snackbar.LENGTH_SHORT).show();
+                        if (!valid) Snackbar.make(rootView, msg, Snackbar.LENGTH_SHORT).show();
+                        else {
+                            FirebaseFirestore fsdb = FirebaseFirestore.getInstance();
+                            CollectionReference sessionsRef = fsdb.collection("bookings");
+
+                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                            Map<String, Object> booking = new HashMap<>();
+                            booking.put("date", mCalendar.getTime());
+                            booking.put("type", "court");
+//                            booking.put("price", Double.parseDouble(((EditText) rootView.findViewById(R.id.et_price)).getText().toString()));
+                            booking.put("price", 0.00);
+                            booking.put("court", mOptions.get(2));
+                            booking.put("user", fsdb.document("users/"+user.getUid()));
+                            sessionsRef.add(booking);
+                            Toast.makeText(getContext(), "Successfully created booking", Toast.LENGTH_LONG).show();
+                            getActivity().finish();
+                            startActivity(new Intent(getContext(), MainActivity.class));
+                        }
+
+
                     }
                 });
 
@@ -117,7 +178,10 @@ public class NormalBookingFragment extends Fragment {
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AppTheme_Dialog);
-            final String[] times = {"09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00"};
+            String[] timings = {"09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00"};
+            ArrayList<String> timingsAL = new ArrayList<String>(Arrays.asList(timings));
+//            timingsAL.removeAll(mTimesTaken);
+            final ArrayList<String> times = timingsAL;
             ListAdapter timesAdapter = new ArrayAdapter<String>(getContext(), R.layout.list_item_centred, times);
             View title = View.inflate(getContext(), R.layout.dialog_title, null);
             ((TextView) title.findViewById(R.id.title)).setText("Choose a time");
@@ -125,13 +189,30 @@ public class NormalBookingFragment extends Fragment {
                     .setAdapter(timesAdapter, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            int hourOfDay = Integer.parseInt(times[which].split(":")[0]);
+                            int hourOfDay = Integer.parseInt(times.get(which).split(":")[0]);
                             mCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
                             mCalendar.set(Calendar.MINUTE, 0);
-                            mOptions.set(1, times[which]);
+                            mOptions.set(1, times.get(which));
                             while (mOptions.size() > 2) mOptions.remove(2);
                             mOptions.add("Choose a court");
                             mOptionsAdapter.notifyDataSetChanged();
+
+                            FirebaseFirestore fsdb = FirebaseFirestore.getInstance();
+                            Date nDate = mCalendar.getTime();
+                            fsdb.collection("bookings")
+                                    .whereEqualTo("date", mCalendar.getTime())
+                                    .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
+                                            mCourtsTaken = new ArrayList<>();
+                                            for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                                                Map booking = document.getData();
+                                                mCourtsTaken.add((String) booking.get("court"));
+                                            }
+                                        }
+                                    });
+
+
                         }
                     })
                     .setNegativeButton(R.string.text_cancel, new DialogInterface.OnClickListener() {
@@ -147,14 +228,23 @@ public class NormalBookingFragment extends Fragment {
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AppTheme_Dialog);
-            final String[] courts = {"Court 1", "Court 2", "Court 3", "Court 4"};
+            String[] courtsA = {"Court 1", "Court 2", "Court 3", "Court 4"};
+            ArrayList<String> courtsAL = new ArrayList<String>(Arrays.asList(courtsA));
+            courtsAL.removeAll(mCourtsTaken);
+            final ArrayList<String> courts = courtsAL;
+
+            if (courts.isEmpty()) {
+                this.dismiss();
+                Toast.makeText(getContext(), "No courts available", Snackbar.LENGTH_LONG).show();
+            }
+
             ListAdapter courtsAdapter = new ArrayAdapter<String>(getContext(), R.layout.list_item_centred, courts);
             View title = View.inflate(getContext(), R.layout.dialog_title, null);
             ((TextView) title.findViewById(R.id.title)).setText("Choose a court");
             builder.setCustomTitle(title)
                     .setAdapter(courtsAdapter, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            mOptions.set(2, courts[which]);
+                            mOptions.set(2, courts.get(which));
                             mOptionsAdapter.notifyDataSetChanged();
                         }
                     })

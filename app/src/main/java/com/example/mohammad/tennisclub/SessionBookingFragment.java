@@ -51,33 +51,33 @@ public class SessionBookingFragment extends Fragment {
             sessionImage.setImageResource(R.drawable.ic_balls);
         }
 
-        HashMap<String, ArrayList<Session>> session = new HashMap<>();
-        ArrayList<Session> sessions = new ArrayList<>();
-        sessions.add(new Session("Monday, 19 Mar 2018", "11:00"));
-        sessions.add(new Session("Monday, 19 Mar 2018", "12:00"));
-        session.put("Monday, 19 Mar 2018", sessions);
-        sessions = new ArrayList<>();
-        sessions.add(new Session("Tuesday, 20 Mar 2018", "09:00"));
-        sessions.add(new Session("Tuesday, 20 Mar 2018", "12:00"));
-        sessions.add(new Session("Tuesday, 20 Mar 2018", "15:00"));
-        sessions.add(new Session("Tuesday, 20 Mar 2018", "18:00"));
-        session.put("Tuesday, 20 Mar 2018", sessions);
-        sessions = new ArrayList<>();
-        sessions.add(new Session("Wednesday, 21 Mar 2018", "14:00"));
-        sessions.add(new Session("Wednesday, 21 Mar 2018", "16:00"));
-        sessions.add(new Session("Wednesday, 21 Mar 2018", "17:00"));
-        session.put("Wednesday, 21 Mar 2018", sessions);
+//        HashMap<String, ArrayList<Session>> session = new HashMap<>();
+//        ArrayList<Session> sessions = new ArrayList<>();
+//        sessions.add(new Session("Monday, 19 Mar 2018", "11:00"));
+//        sessions.add(new Session("Monday, 19 Mar 2018", "12:00"));
+//        session.put("Monday, 19 Mar 2018", sessions);
+//        sessions = new ArrayList<>();
+//        sessions.add(new Session("Tuesday, 20 Mar 2018", "09:00"));
+//        sessions.add(new Session("Tuesday, 20 Mar 2018", "12:00"));
+//        sessions.add(new Session("Tuesday, 20 Mar 2018", "15:00"));
+//        sessions.add(new Session("Tuesday, 20 Mar 2018", "18:00"));
+//        session.put("Tuesday, 20 Mar 2018", sessions);
+//        sessions = new ArrayList<>();
+//        sessions.add(new Session("Wednesday, 21 Mar 2018", "14:00"));
+//        sessions.add(new Session("Wednesday, 21 Mar 2018", "16:00"));
+//        sessions.add(new Session("Wednesday, 21 Mar 2018", "17:00"));
+//        session.put("Wednesday, 21 Mar 2018", sessions);
 
-        ExpandableListView listView = rootView.findViewById(R.id.elv_booking_options);
-        listView.setAdapter(new ExpandableListAdapter(session));
-        listView.expandGroup(0);
-        listView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-            @Override
-            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                Toast.makeText(getContext(), "Clicked " + groupPosition + "." + childPosition, Toast.LENGTH_SHORT).show();
-                return false;
-            }
-        });
+//        ExpandableListView listView = rootView.findViewById(R.id.elv_booking_options);
+//        listView.setAdapter(new ExpandableListAdapter(session));
+//        listView.expandGroup(0);
+//        listView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+//            @Override
+//            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+//                Toast.makeText(getContext(), "Clicked " + groupPosition + "." + childPosition, Toast.LENGTH_SHORT).show();
+//                return false;
+//            }
+//        });
 
         return rootView;
     }
@@ -112,7 +112,7 @@ public class SessionBookingFragment extends Fragment {
                 holder = (ViewHolder) view.getTag();
             }
             Session session = getChild(groupPosition, childPosition);
-            holder.textView.setText(session.getTime());
+//            holder.textView.setText(session.getTime());
             return view;
         }
 

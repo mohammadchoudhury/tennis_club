@@ -1,49 +1,52 @@
 package com.example.mohammad.tennisclub.model;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import com.google.firebase.firestore.DocumentReference;
 
-public class Booking {
+import java.util.Locale;
 
-    private enum Court {
-        ONE,
-        TWO,
-        THREE,
-        FOUR;
+public class Booking extends Session {
+
+    private String location;
+    private double price;
+    private DocumentReference user;
+    public String coach;
+
+    public Booking() {
     }
 
-    private enum Type {
-        NORMAL,
-        GROUP,
-        PRIVATE;
+    public String getLocation() {
+        return location;
     }
 
-    private Court court;
-    private Type type;
-    private Date dateTime;
-
-//    SimpleDateFormat sdf = new SimpleDateFormat("dd mmm yyyy hh:mm");
-//    Date date1 = sdf.parse("2009-12-31");
-
-    public Booking() throws ParseException {}
-
-    public Booking(Court court, Type type, Date dateTime) throws ParseException {
-        this.court = court;
-        this.type = type;
-        this.dateTime = dateTime;
+    public void setLocation(String location) {
+        this.location = location;
     }
 
-    public Court getCourt() { return court; }
+    public double getPrice() {
+        return price;
+    }
 
-    public void setCourt(Court court) { this.court = court; }
+    public String getPriceString() {
+        return "£" + String.format(Locale.UK, "%1.2f", price);
+    }
 
-    public Type getType() { return type; }
+    public void setPrice(double price) {
+        this.price = price;
+    }
 
-    public void setType(Type type) { this.type = type; }
+    public DocumentReference getUser() {
+        return user;
+    }
 
-    public Date getDateTime() { return dateTime; }
+    public void setUser(DocumentReference user) {
+        this.user = user;
+    }
 
-    public void setDateTime(Date dateTime) { this.dateTime = dateTime; }
+    public String getCoach() {
+        return coach;
+    }
 
+    public void setCoach(String coach) {
+        this.coach = coach;
+    }
 }
