@@ -3,8 +3,8 @@ package com.example.mohammad.tennisclub;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -19,17 +19,17 @@ import android.widget.TextView;
 import com.example.mohammad.tennisclub.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
-    private ValueEventListener mValueEventListener;
     private DatabaseReference mUserRef;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,20 +49,18 @@ public class MainActivity extends AppCompatActivity {
         };
 
         FirebaseUser user = mAuth.getCurrentUser();
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        mUserRef = database.getReference("users/" + user.getUid());
-        mValueEventListener = new ValueEventListener() {
+        FirebaseFirestore fsdb = FirebaseFirestore.getInstance();
+        DocumentReference userRef = fsdb.document("users/" + user.getUid());
+        userRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                User cUser = dataSnapshot.getValue(User.class);
-                ((TextView) findViewById(R.id.nav_tv_name)).setText(cUser.getName());
-                ((TextView) findViewById(R.id.nav_tv_email)).setText(cUser.getEmail());
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if (documentSnapshot != null && documentSnapshot.exists()) {
+                    User user = documentSnapshot.toObject(User.class);
+                    ((TextView) findViewById(R.id.nav_tv_name)).setText(user.getName());
+                    ((TextView) findViewById(R.id.nav_tv_email)).setText(user.getEmail());
+                }
             }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        };
+        });
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -133,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
                 if (fragment != null) {
                     FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.fragment_container, fragment);
-                    fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE );
+                    fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                     fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
                 }
@@ -149,13 +147,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         mAuth.addAuthStateListener(mAuthStateListener);
-        mUserRef.addValueEventListener(mValueEventListener);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        mUserRef.removeEventListener(mValueEventListener);
         mAuth.removeAuthStateListener(mAuthStateListener);
     }
 
