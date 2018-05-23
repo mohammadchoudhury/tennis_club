@@ -1,7 +1,9 @@
 package com.example.mohammad.tennisclub;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,14 +11,12 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -25,20 +25,21 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+
+import javax.annotation.Nullable;
 
 public class NormalBookingFragment extends Fragment {
 
@@ -46,7 +47,7 @@ public class NormalBookingFragment extends Fragment {
     static Calendar mCalendar;
     static ArrayList<String> mOptions;
     static ArrayAdapter mOptionsAdapter;
-//    static ArrayList<String> mTimesTaken;
+    //    static ArrayList<String> mTimesTaken;
     static ArrayList<String> mCourtsTaken;
 
     @Override
@@ -144,7 +145,7 @@ public class NormalBookingFragment extends Fragment {
 //                            booking.put("price", Double.parseDouble(((EditText) rootView.findViewById(R.id.et_price)).getText().toString()));
                             booking.put("price", 0.00);
                             booking.put("court", mOptions.get(2));
-                            booking.put("user", fsdb.document("users/"+user.getUid()));
+                            booking.put("user", fsdb.document("users/" + user.getUid()));
                             sessionsRef.add(booking);
                             Toast.makeText(getContext(), "Successfully created booking", Toast.LENGTH_LONG).show();
                             getActivity().finish();
@@ -197,22 +198,27 @@ public class NormalBookingFragment extends Fragment {
                             mOptions.add("Choose a court");
                             mOptionsAdapter.notifyDataSetChanged();
 
+                            final Context context = getActivity();
+
                             FirebaseFirestore fsdb = FirebaseFirestore.getInstance();
-                            Date nDate = mCalendar.getTime();
                             fsdb.collection("bookings")
                                     .whereEqualTo("date", mCalendar.getTime())
                                     .addSnapshotListener(new EventListener<QuerySnapshot>() {
                                         @Override
-                                        public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
+                                        public void onEvent(@Nullable QuerySnapshot snapshots, @Nullable FirebaseFirestoreException e) {
                                             mCourtsTaken = new ArrayList<>();
-                                            for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                                                Map booking = document.getData();
-                                                mCourtsTaken.add((String) booking.get("court"));
+                                            for (DocumentChange dc : snapshots.getDocumentChanges()) {
+                                                QueryDocumentSnapshot document = dc.getDocument();
+                                                mCourtsTaken.add((String) document.get("court"));
+                                                if (dc.getType() == DocumentChange.Type.ADDED
+                                                        && mOptions.size() == 3
+                                                        && mOptions.get(2).equals(dc.getDocument().get("court"))) {
+                                                    Toast.makeText(context, "Sorry. This court has been booked.", Toast.LENGTH_SHORT).show();
+                                                    ((Activity) context).onBackPressed();
+                                                }
                                             }
                                         }
                                     });
-
-
                         }
                     })
                     .setNegativeButton(R.string.text_cancel, new DialogInterface.OnClickListener() {
