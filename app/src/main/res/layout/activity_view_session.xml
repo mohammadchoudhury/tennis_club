@@ -158,4 +158,12 @@
         android:layout_marginTop="8dp"
         android:background="@drawable/btn_default"
         android:text="Book Session" />
+    <Button
+        android:id="@+id/btn_cancel_session"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/btn_default"
+        android:text="Cancel Session"
+        android:visibility="gone"/>
 </LinearLayout>

@@ -1,5 +1,6 @@
 package com.example.mohammad.tennisclub;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -44,7 +45,7 @@ public class BookingTabFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_booking, container, false);
 
@@ -62,7 +63,9 @@ public class BookingTabFragment extends Fragment {
         bookingsListView.setAdapter(bookingsAdapter);
         bookingsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView parent, View v, int position, long id) {
-                Toast.makeText(parent.getContext(), "Clicked booking " + ++position, Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getContext(), ViewBookingActivity.class);
+                intent.putExtra("bookingId", bookings.get(position).getID());
+                startActivity(intent);
             }
         });
 
