@@ -1,6 +1,7 @@
 package com.example.mohammad.tennisclub;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -71,8 +72,10 @@ public class SessionBookingFragment extends Fragment {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
                 String sessionId = ((Session) parent.getExpandableListAdapter().getChild(groupPosition, childPosition)).getID();
-                Toast.makeText(getContext(), "Clicked " + groupPosition + "." + childPosition + " : " + sessionId, Toast.LENGTH_LONG).show();
-                return false;
+                Intent intent = new Intent(getContext(), ViewSessionActivity.class);
+                intent.putExtra("sessionId", sessionId);
+                startActivity(intent);
+                return true;
             }
         });
 
