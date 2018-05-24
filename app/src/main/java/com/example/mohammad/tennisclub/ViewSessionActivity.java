@@ -71,7 +71,7 @@ public class ViewSessionActivity extends AppCompatActivity {
                                 Map<String, Object> booking = snapshot.getData();
                                 booking.put("coach", "Imran Uddin");
                                 booking.put("court", "Court5");
-                                booking.put("user", fsdb.document("user/" + user.getUid()));
+                                booking.put("user", fsdb.document("users/" + user.getUid()));
                                 fsdb.collection("bookings")
                                         .add(booking)
                                         .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
