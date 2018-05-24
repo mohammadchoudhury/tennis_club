@@ -34,8 +34,6 @@ public class ViewSessionActivity extends AppCompatActivity {
 
         fsdb.document("sessions/" + sessionId);
 
-        findViewById(R.id.textView_date);
-
         DocumentReference sessionRef = fsdb.document("sessions/" + sessionId);
         sessionRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override

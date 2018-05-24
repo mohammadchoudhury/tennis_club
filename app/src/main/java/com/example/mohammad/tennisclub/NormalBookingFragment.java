@@ -120,7 +120,7 @@ public class NormalBookingFragment extends Fragment {
 
                             Map<String, Object> booking = new HashMap<>();
                             booking.put("date", mCalendar.getTime());
-                            booking.put("type", "court");
+                            booking.put("type", "Court");
 //                            booking.put("price", Double.parseDouble(((EditText) rootView.findViewById(R.id.et_price)).getText().toString()));
                             booking.put("price", 0.00);
                             booking.put("court", mOptions.get(2));
