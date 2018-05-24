@@ -54,8 +54,14 @@ public class MainActivity extends AppCompatActivity {
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                 if (documentSnapshot != null && documentSnapshot.exists()) {
                     User user = documentSnapshot.toObject(User.class);
-                    ((TextView) findViewById(R.id.nav_tv_name)).setText(user.getName());
-                    ((TextView) findViewById(R.id.nav_tv_email)).setText(user.getEmail());
+                    TextView navName = (TextView) findViewById(R.id.nav_tv_name);
+                    if (navName != null) {
+                        navName.setText(user.getName());
+                    }
+                    TextView navEmail = (TextView) findViewById(R.id.nav_tv_email);
+                    if (navEmail != null) {
+                        navEmail.setText(user.getEmail());
+                    }
                 }
             }
         });
