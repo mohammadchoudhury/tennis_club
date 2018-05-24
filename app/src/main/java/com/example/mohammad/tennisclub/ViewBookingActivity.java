@@ -16,6 +16,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Date;
+
 public class ViewBookingActivity extends AppCompatActivity {
 
     @Override
@@ -56,6 +58,8 @@ public class ViewBookingActivity extends AppCompatActivity {
 
                 ((TextView) findViewById(R.id.textView_coach)).setText(booking.getCoach());
                 ((TextView) findViewById(R.id.textView_court)).setText(booking.getCourt());
+
+                if (booking.getDate().before(new Date())) findViewById(R.id.btn_cancel_session).setVisibility(View.INVISIBLE);
 
             }
         });
