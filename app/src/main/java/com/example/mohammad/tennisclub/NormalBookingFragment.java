@@ -22,10 +22,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -48,6 +50,7 @@ public class NormalBookingFragment extends Fragment {
     static ArrayList<String> mOptions;
     static ArrayAdapter mOptionsAdapter;
     static ArrayList<String> mCourtsTaken;
+    static double price = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -122,7 +125,7 @@ public class NormalBookingFragment extends Fragment {
                             booking.put("date", mCalendar.getTime());
                             booking.put("type", "Court");
 //                            booking.put("price", Double.parseDouble(((EditText) rootView.findViewById(R.id.et_price)).getText().toString()));
-                            booking.put("price", 0.00);
+                            booking.put("price", price);
                             booking.put("court", mOptions.get(2));
                             booking.put("user", fsdb.document("users/" + user.getUid()));
                             sessionsRef.add(booking);
@@ -231,6 +234,21 @@ public class NormalBookingFragment extends Fragment {
                         public void onClick(DialogInterface dialog, int which) {
                             mOptions.set(2, courts.get(which));
                             mOptionsAdapter.notifyDataSetChanged();
+                            final TextView tvPrice = getActivity().findViewById(R.id.tv_court_price);
+                            FirebaseFirestore fsdb = FirebaseFirestore.getInstance();
+                            fsdb.collection("courts")
+                                    .whereEqualTo("name", courts.get(which))
+                                    .get()
+                                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onSuccess(QuerySnapshot snapshots) {
+                                            for (DocumentSnapshot document : snapshots.getDocuments()) {
+                                                String price = String.valueOf(document.get("price"));
+                                                tvPrice.setText("£" + price);
+                                                NormalBookingFragment.price = Double.valueOf(price);
+                                            }
+                                        }
+                                    });
                         }
                     })
                     .setNegativeButton(R.string.text_cancel, null);
