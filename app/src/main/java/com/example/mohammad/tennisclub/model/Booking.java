@@ -4,19 +4,19 @@ import com.google.firebase.firestore.DocumentReference;
 
 public class Booking extends Session {
 
-    private String location;
+    private String court;
     private DocumentReference user;
     public String coach;
 
     public Booking() {
     }
 
-    public String getLocation() {
-        return location;
+    public String getCourt() {
+        return court;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setCourt(String location) {
+        this.court = location;
     }
 
     public DocumentReference getUser() {

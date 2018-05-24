@@ -70,7 +70,7 @@ public class ViewSessionActivity extends AppCompatActivity {
                             public void onSuccess(DocumentSnapshot snapshot) {
                                 Map<String, Object> booking = snapshot.getData();
                                 booking.put("coach", "Imran Uddin");
-                                booking.put("court", "Court5");
+                                booking.put("court", "Court 5");
                                 booking.put("user", fsdb.document("users/" + user.getUid()));
                                 fsdb.collection("bookings")
                                         .add(booking)
