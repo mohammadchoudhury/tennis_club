@@ -48,7 +48,7 @@ public class BookingTabFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_booking, container, false);
 
-        // position: 1 = upcoming bookings, 2 = previous bookings
+        // position: 0 = upcoming bookings, 1 = previous bookings
         int position = getArguments().getInt(ARG_POSITION, 0);
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -81,12 +81,6 @@ public class BookingTabFragment extends Fragment {
             }
         };
 
-//        fsdb.collection("bookings")
-//                .whereEqualTo("user", fsdb.document("users/" + user.getUid()))
-////                .whereGreaterThanOrEqualTo("date", new Date())
-//                .addSnapshotListener(snapshotEventListener);
-//
-////
         Query query = fsdb.collection("bookings")
                 .whereEqualTo("user", fsdb.document("users/" + user.getUid()));
 

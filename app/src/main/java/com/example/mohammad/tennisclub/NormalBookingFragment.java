@@ -47,7 +47,6 @@ public class NormalBookingFragment extends Fragment {
     static Calendar mCalendar;
     static ArrayList<String> mOptions;
     static ArrayAdapter mOptionsAdapter;
-    //    static ArrayList<String> mTimesTaken;
     static ArrayList<String> mCourtsTaken;
 
     @Override
@@ -92,26 +91,6 @@ public class NormalBookingFragment extends Fragment {
                         + mCalendar.get(Calendar.YEAR);
                 mOptions.set(0, dateString);
                 mOptionsAdapter.notifyDataSetChanged();
-
-//                FirebaseFirestore fsdb = FirebaseFirestore.getInstance();
-//                Date nDate = mCalendar.getTime();
-//                nDate.setTime(mCalendar.getTimeInMillis() + 86400000);
-//                fsdb.collection("bookings")
-//                        .whereGreaterThanOrEqualTo("date", mCalendar.getTime())
-//                        .whereLessThan("date", nDate)
-//                        .addSnapshotListener(new EventListener<QuerySnapshot>() {
-//                            @Override
-//                            public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
-//                                mTimesTaken = new ArrayList<>();
-//                                for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-//                                    Map booking = document.getData();
-//                                    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.UK);
-//                                    String time = sdf.format(booking.get("date"));
-//                                    mTimesTaken.add(time);
-//                                }
-//                            }
-//                        });
-
             }
         };
 
