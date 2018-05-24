@@ -64,6 +64,10 @@ public class Session {
         return price;
     }
 
+    public String getPriceString() {
+        return "£" + String.format(Locale.UK, "%1.2f", price);
+    }
+
     public void setPrice(double price) {
         this.price = price;
     }

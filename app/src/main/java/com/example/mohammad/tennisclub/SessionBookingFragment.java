@@ -13,9 +13,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mohammad.tennisclub.model.Session;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+
+import javax.annotation.Nullable;
 
 public class SessionBookingFragment extends Fragment {
 
@@ -40,44 +48,64 @@ public class SessionBookingFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_session_booking, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_session_booking, container, false);
 
         mSessionType = (SessionType) getArguments().getSerializable(ARG_SESSION_TYPE);
 
         ImageView sessionImage = ((ImageView) rootView.findViewById(R.id.iv_session_icon));
+
+        String sessionType = "";
         if (mSessionType == SessionType.PRIVATE) {
             sessionImage.setImageResource(R.drawable.ic_racket);
+            sessionType = "Private";
         } else {
             sessionImage.setImageResource(R.drawable.ic_balls);
+            sessionType = "Group";
         }
 
-//        HashMap<String, ArrayList<Session>> session = new HashMap<>();
-//        ArrayList<Session> sessions = new ArrayList<>();
-//        sessions.add(new Session("Monday, 19 Mar 2018", "11:00"));
-//        sessions.add(new Session("Monday, 19 Mar 2018", "12:00"));
-//        session.put("Monday, 19 Mar 2018", sessions);
-//        sessions = new ArrayList<>();
-//        sessions.add(new Session("Tuesday, 20 Mar 2018", "09:00"));
-//        sessions.add(new Session("Tuesday, 20 Mar 2018", "12:00"));
-//        sessions.add(new Session("Tuesday, 20 Mar 2018", "15:00"));
-//        sessions.add(new Session("Tuesday, 20 Mar 2018", "18:00"));
-//        session.put("Tuesday, 20 Mar 2018", sessions);
-//        sessions = new ArrayList<>();
-//        sessions.add(new Session("Wednesday, 21 Mar 2018", "14:00"));
-//        sessions.add(new Session("Wednesday, 21 Mar 2018", "16:00"));
-//        sessions.add(new Session("Wednesday, 21 Mar 2018", "17:00"));
-//        session.put("Wednesday, 21 Mar 2018", sessions);
+        final HashMap<String, ArrayList<Session>> sessionByDate = new HashMap<>();
+        final ExpandableListView listView = rootView.findViewById(R.id.elv_booking_options);
+        ExpandableListAdapter sessionAdapter = new ExpandableListAdapter(sessionByDate);
+        listView.setAdapter(sessionAdapter);
+        listView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                String sessionId = ((Session) parent.getExpandableListAdapter().getChild(groupPosition, childPosition)).getID();
+                Toast.makeText(getContext(), "Clicked " + groupPosition + "." + childPosition + " : " + sessionId, Toast.LENGTH_LONG).show();
+                return false;
+            }
+        });
 
-//        ExpandableListView listView = rootView.findViewById(R.id.elv_booking_options);
-//        listView.setAdapter(new ExpandableListAdapter(session));
-//        listView.expandGroup(0);
-//        listView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-//            @Override
-//            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-//                Toast.makeText(getContext(), "Clicked " + groupPosition + "." + childPosition, Toast.LENGTH_SHORT).show();
-//                return false;
-//            }
-//        });
+
+        FirebaseFirestore fsdb = FirebaseFirestore.getInstance();
+        fsdb.collection("sessions")
+                .orderBy("date")
+                .whereGreaterThan("date", new Date())
+                .whereEqualTo("type", sessionType)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot snapshots, @Nullable FirebaseFirestoreException e) {
+                        if (snapshots != null) {
+                            sessionByDate.clear();
+                            for (QueryDocumentSnapshot document : snapshots) {
+                                Session session = document.toObject(Session.class);
+                                session.setID(document.getId());
+                                String date = session.getDateString();
+                                if (sessionByDate.get(date) == null) {
+                                    ArrayList<Session> sessionList = new ArrayList<>();
+                                    sessionList.add(session);
+                                    sessionByDate.put(date, sessionList);
+                                } else {
+                                    sessionByDate.get(date).add(session);
+                                }
+                            }
+
+                            ((ExpandableListAdapter) listView.getExpandableListAdapter()).notifyDataSetChanged();
+                            listView.expandGroup(0);
+                        }
+                    }
+                });
+
 
         return rootView;
     }
@@ -102,22 +130,25 @@ public class SessionBookingFragment extends Fragment {
 
         @Override
         public View getChildView(int groupPosition, final int childPosition, boolean isLastChild, View view, ViewGroup parent) {
-            ViewHolder holder = null;
+            SessionViewHolder holder = null;
             if (view == null) {
-                holder = new ViewHolder();
-                view = getLayoutInflater().inflate(R.layout.list_item_centred, null);
-                holder.textView = view.findViewById(R.id.tv_item);
+                holder = new SessionViewHolder();
+                view = getLayoutInflater().inflate(R.layout.list_item_two_part_horizontal, null);
+                holder.time = view.findViewById(R.id.tv_item1);
+                holder.price = view.findViewById(R.id.tv_item2);
                 view.setTag(holder);
             } else {
-                holder = (ViewHolder) view.getTag();
+                holder = (SessionViewHolder) view.getTag();
             }
             Session session = getChild(groupPosition, childPosition);
-//            holder.textView.setText(session.getTime());
+            holder.time.setText(session.getTimeString());
+            holder.price.setText(String.valueOf(session.getPriceString()));
             return view;
         }
 
         @Override
         public int getChildrenCount(int groupPosition) {
+            if (sessions.isEmpty()) return 0;
             return sessions.get(getKey(groupPosition)).size();
         }
 
@@ -133,22 +164,23 @@ public class SessionBookingFragment extends Fragment {
 
         @Override
         public long getGroupId(int groupPosition) {
+            if (sessions.isEmpty()) return -1;
             return getGroup(groupPosition).hashCode();
         }
 
         @Override
         public View getGroupView(int groupPosition, boolean isExpanded, View view, ViewGroup parent) {
-            ViewHolder holder = null;
+            GroupViewHolder holder = null;
             if (view == null) {
-                holder = new ViewHolder();
+                holder = new GroupViewHolder();
                 view = getLayoutInflater().inflate(R.layout.list_item_session_header, null);
-                holder.textView = view.findViewById(R.id.tv_header);
+                holder.header = view.findViewById(R.id.tv_header);
                 view.setTag(holder);
             } else {
-                holder = (ViewHolder) view.getTag();
+                holder = (GroupViewHolder) view.getTag();
             }
             String sessionDate = (String) sessions.keySet().toArray()[groupPosition];
-            holder.textView.setText(sessionDate);
+            holder.header.setText(sessionDate);
             return view;
         }
 
@@ -163,11 +195,18 @@ public class SessionBookingFragment extends Fragment {
         }
 
         private String getKey(int groupPosition) {
+            if (sessions.isEmpty()) return null;
             return (String) sessions.keySet().toArray()[groupPosition];
         }
 
-        private class ViewHolder {
-            public TextView textView;
+        private class GroupViewHolder {
+            public TextView header;
+        }
+
+
+        private class SessionViewHolder {
+            public TextView time;
+            public TextView price;
         }
     }
 
