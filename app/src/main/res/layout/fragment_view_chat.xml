@@ -23,10 +23,34 @@
             android:id="@+id/tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:text="Name"
             android:textSize="24sp"
-            android:textStyle="bold"
-            android:layout_gravity="center_vertical"/>
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="100dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_call"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@drawable/btn_default"
+                android:drawableLeft="@drawable/ic_call_black_24dp"
+                android:minWidth="0dp" />
+
+            <Button
+                android:id="@+id/btn_email"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@drawable/btn_danger"
+                android:drawableLeft="@drawable/ic_email_black_24dp"
+                android:minWidth="0dp" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -34,7 +58,7 @@
         android:id="@+id/lv_messages"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -45,9 +69,9 @@
         <EditText
             android:id="@+id/et_message"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:hint="Enter Message"/>
+            android:layout_weight="1"
+            android:hint="Enter Message" />
 
         <Button
             android:id="@+id/btn_send"

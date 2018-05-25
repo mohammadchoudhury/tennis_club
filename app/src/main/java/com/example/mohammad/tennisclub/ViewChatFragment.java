@@ -2,6 +2,8 @@ package com.example.mohammad.tennisclub;
 
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -77,8 +80,20 @@ public class ViewChatFragment extends Fragment {
         final DocumentReference fromRef = fsdb.document("coach/" + fromId);
         fromRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
-            public void onSuccess(DocumentSnapshot snapshot) {
+            public void onSuccess(final DocumentSnapshot snapshot) {
                 ((TextView) rootView.findViewById(R.id.tv_name)).setText((String) snapshot.get("name"));
+                ((Button) rootView.findViewById(R.id.btn_call)).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(new Intent(Intent.ACTION_DIAL).setData(Uri.parse("tel:" + snapshot.get("phone"))));
+                    }
+                });
+                ((Button) rootView.findViewById(R.id.btn_email)).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(new Intent(Intent.ACTION_SENDTO).setData(Uri.parse("mailto:" + (String) snapshot.get("email") + "?subject=Message for Energy Tennis Club&body=Hi " + (String) snapshot.get("name") + ",")));
+                    }
+                });
             }
         });
 
