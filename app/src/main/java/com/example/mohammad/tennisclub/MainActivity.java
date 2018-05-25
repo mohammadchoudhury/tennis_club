@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.example.mohammad.tennisclub.fcm.FirebaseAppInstanceIdService;
 import com.example.mohammad.tennisclub.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -33,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        new FirebaseAppInstanceIdService().onTokenRefresh();
 
         mAuth = FirebaseAuth.getInstance();
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
@@ -85,8 +88,17 @@ public class MainActivity extends AppCompatActivity {
         navMenu.findItem(R.id.nav_feedback).setEnabled(false);
         navMenu.findItem(R.id.nav_help).setEnabled(false);
 
+        String fromId = getIntent().getStringExtra("fromId");
+        Fragment frag = new HomeFragment();
+        if (fromId != null && !fromId.equals("")) {
+            Bundle extras = new Bundle();
+            extras.putString("fromId", fromId);
+            frag = new ViewChatFragment();
+            frag.setArguments(extras);
+        }
+
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, new HomeFragment());
+        fragmentTransaction.replace(R.id.fragment_container, frag);
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         fragmentTransaction.commit();
     }

@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import org.json.JSONObject;
+
+import java.io.DataOutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
@@ -45,7 +51,8 @@ public class ViewChatFragment extends Fragment {
     public ViewChatFragment() {
     }
 
-    static DocumentReference userRef;
+    DocumentReference userRef;
+    String userId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,13 +61,19 @@ public class ViewChatFragment extends Fragment {
 
         String fromId = "tw9dXHrBf4fVgjkW8FPu4PURkPh2";
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         final FirebaseFirestore fsdb = FirebaseFirestore.getInstance();
         final ArrayList<Message> messages = new ArrayList<>();
         final MessageListViewAdapter messagesAdapter = new MessageListViewAdapter(messages);
         ListView chatsListView = (ListView) rootView.findViewById(R.id.lv_messages);
         chatsListView.setAdapter(messagesAdapter);
         userRef = fsdb.document("users/" + user.getUid());
+        userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot snapshot) {
+                userId = snapshot.getId();
+            }
+        });
         final DocumentReference fromRef = fsdb.document("coach/" + fromId);
         fromRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -112,7 +125,7 @@ public class ViewChatFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 EditText etMessage = ((EditText) rootView.findViewById(R.id.et_message));
-                String message = etMessage.getText().toString().trim();
+                final String message = etMessage.getText().toString().trim();
                 if (!message.equals("")) {
                     CollectionReference messagesRef = fsdb.collection("messages/");
                     Map<String, Object> messageMap = new HashMap<>();
@@ -125,11 +138,57 @@ public class ViewChatFragment extends Fragment {
                 etMessage.setText("");
                 InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(rootView.getWindowToken(), 0);
+                fromRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(final DocumentSnapshot snapshot) {
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                sendMessage((String) snapshot.get("token"), message, (String) snapshot.get("name"), userId);
+                            }
+                        }).start();
+                    }
+                });
             }
         });
 
         return rootView;
     }
+
+    private void sendMessage(String token, String message, String from, String fromUserId) {
+        try {
+            URL url = new URL("https://fcm.googleapis.com/fcm/send"); //in the real code, there is an ip and a port
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setRequestProperty("Authorization", "key=AIzaSyCiVN0XUC4U61fh8mRAsXYOEDvMsfQQcOY");
+            conn.connect();
+
+            JSONObject dataJSON = new JSONObject();
+            dataJSON.put("title", "Message from " + from);
+            dataJSON.put("message", message);
+            dataJSON.put("fromId", fromUserId);
+
+            JSONObject messageJSON = new JSONObject();
+            messageJSON.put("to", token);
+            messageJSON.put("data", dataJSON);
+            messageJSON.put("priority", "high");
+
+            DataOutputStream os = new DataOutputStream(conn.getOutputStream());
+            os.writeBytes(messageJSON.toString());
+
+            os.flush();
+            os.close();
+
+            Log.d("Message:", conn.getResponseMessage());
+            Log.d("Message:", messageJSON.toString());
+
+            conn.disconnect();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public void updateMessages(ArrayList<Message> messages, MessageListViewAdapter messagesAdapter) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
